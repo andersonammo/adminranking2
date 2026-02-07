@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKING GERAL</title>
+    <style>
+        :root { --bg: #000; --text: #00ff00; --alert: #ff0000; --panel: #0a0a0a; --gold: #ffd700; }
+        body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 10px; height: 100vh; overflow: hidden; }
+
+        /* TELA START */
+        #overlay-start { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        #btn-start { padding: 20px 40px; font-size: 2rem; background: #00ff00; border: none; font-weight: bold; cursor: pointer; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+
+        /* ANIMAÇÃO VITÓRIA */
+        #overlay-vitoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; }
+        .nome-loja-vitoria { font-size: 5rem; font-weight: bold; color: var(--gold); text-transform: uppercase; animation: neon 0.8s infinite alternate; border: 4px solid var(--gold); padding: 20px; border-radius: 20px; box-shadow: 0 0 50px var(--gold); }
+        @keyframes neon { from { text-shadow: 0 0 10px var(--gold); } to { text-shadow: 0 0 40px var(--gold), 0 0 80px var(--text); transform: scale(1.1); } }
+
+        /* HEADER */
+        .metas-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; border-bottom: 2px solid var(--text); padding-bottom: 10px; }
+        .meta-card { background: var(--panel); padding: 5px; border: 1px solid #333; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        .meta-card h3 { margin: 0; font-size: 0.65rem; color: #888; text-transform: uppercase; }
+        .meta-card .valor { font-size: 1.2rem; font-weight: bold; }
+        .card-acumulado .valor { color: #fff; text-shadow: 0 0 5px #fff; }
+        
+        /* TABELA COM 7 COLUNAS */
+        .ranking-container { height: calc(100vh - 180px); overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; } 
+        thead tr { position: sticky; top: 0; background: #000; border-bottom: 4px solid var(--text); z-index: 2; }
+        th { text-align: center; padding: 10px 5px; color: #888; text-transform: uppercase; border-right: 1px solid #222; font-size: 0.8rem; }
+        td { padding: 8px 5px; border-bottom: 1px solid #222; border-right: 1px solid #222; text-align: center; font-weight: bold; font-size: 1.1rem;}
+        .td-nome { text-align: left; padding-left: 10px; white-space: nowrap; }
+        
+        .alerta-vermelho { color: var(--alert); animation: piscar 1.5s infinite; }
+        @keyframes piscar { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div id="overlay-start" onclick="iniciarSistema()"><button id="btn-start">INICIAR SISTEMA</button></div>
+    
+    <div id="overlay-vitoria">
+        <h1 style="color:white; font-size:3rem">META BATIDA!</h1>
+        <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
+    </div>
+
+    <audio id="som-caixa" src="1.mp3"></audio>
+    <audio id="som-corrida" src="2.mp3"></audio>
+    <audio id="som-vitoria" src="3.mp3"></audio>
+
+    <div class="metas-header">
+        <div class="meta-card"><h3>Meta Geral (Mês)</h3><span class="valor" id="meta-geral">...</span></div>
+        <div class="meta-card card-acumulado"><h3>Acumulado (Mês)</h3><span class="valor" id="acumulado-mes">...</span><small id="falta-vender" style="color:#888"></small></div>
+        <div class="meta-card"><h3>Quinzenal</h3><span class="valor" id="meta-quinzena">...</span></div>
+        <div class="meta-card"><h3>Semanal</h3><span class="valor" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-color:#00ff00"><h3>META DIÁRIA HOJE</h3><span class="valor" id="meta-diaria">...</span><small style="color:#fff" id="venda-hoje-total"></small></div>
+    </div>
+
+    <div class="ranking-container">
+        <table id="tabela-ranking">
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th width="20%" style="text-align:left; padding-left:10px">Loja</th>
+                    <th width="15%" style="color:#ffd700">Meta Mês</th>
+                    <th width="15%" style="color:#fff">Acumulado</th>
+                    <th width="15%">Meta Dia</th>
+                    <th width="15%">Hoje</th>
+                    <th width="15%">%</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+<script>
+    // --- COLE SUA URL AQUI ---
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+
+    const lojasConfig = [
+        { nome: "Prime Umuarama", meta: 60000 }, { nome: "Prime Toledo", meta: 30000 },
+        { nome: "Umuarama 1", meta: 60000 }, { nome: "Palotina", meta: 50000 },
+        { nome: "Umuarama 2", meta: 40000 }, { nome: "Douradina", meta: 40000 },
+        { nome: "Altônia", meta: 40000 }, { nome: "Marechal", meta: 20000 },
+        { nome: "Perobal", meta: 20000 }
+    ];
+    // Ajuste de dias úteis para fevereiro
+    const DIAS_UTEIS_TOTAIS = 24;
+    
+    let rankingAnterior = [], ultimoTotalMes = 0, sistemaIniciado = false;
+    let lojasBatida = new Set(), metaGeralBatida = false;
+
+    function iniciarSistema() {
+        try { document.getElementById('som-caixa').play().then(()=>{document.getElementById('som-caixa').pause()}).catch(()=>{}); } catch(e){}
+        document.getElementById('overlay-start').style.display = 'none';
+        sistemaIniciado = true; atualizar();
+    }
+    function tocar(id) { if(sistemaIniciado) { var a = document.getElementById(id); if(a){a.currentTime=0; a.play().catch(()=>{});} } }
+    function animarVitoria(nome) {
+        var ov = document.getElementById('overlay-vitoria');
+        document.getElementById('nome-loja-animacao').innerText = nome;
+        ov.style.display = 'flex'; tocar('som-vitoria');
+        setTimeout(() => { ov.style.display = 'none'; }, 6000);
+    }
+    function fmt(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
+    
+    function getDiasRest() {
+        var hoje=new Date(), dia=hoje.getDate(), ult=new Date(hoje.getFullYear(),hoje.getMonth()+1,0).getDate();
+        if(dia>=ult) return 1;
+        var uteis = Math.floor((ult-dia)*(24/28)); return uteis>0?uteis:1;
+    }
+
+    async function atualizar() {
+        if(!sistemaIniciado) return;
+        try {
+            var res = await fetch(WEB_APP_URL); var dados = await res.json();
+            var vendasHoje = dados.vendasHoje;
+            var totalMes = parseFloat(dados.totalMes);
+            var acumuladoLojas = dados.acumuladoPorLoja || {}; // Pega o acumulado por loja
+
+            var metaGeral = lojasConfig.reduce((a,b)=>a+b.meta,0);
+            document.getElementById('meta-geral').innerText = fmt(metaGeral);
+            document.getElementById('acumulado-mes').innerText = fmt(totalMes);
+            
+            var saldo = metaGeral - totalMes; if(saldo<0) saldo=0;
+            document.getElementById('falta-vender').innerText = "Falta: " + fmt(saldo);
+            
+            var dias = getDiasRest(), metaDiaGeral = saldo/dias;
+            document.getElementById('meta-diaria').innerText = fmt(metaDiaGeral);
+            document.getElementById('meta-semana').innerText = fmt(metaDiaGeral*6);
+            document.getElementById('meta-quinzena').innerText = fmt(metaDiaGeral*12);
+
+            var porLojaHoje = {}; lojasConfig.forEach(l=>porLojaHoje[l.nome]=0);
+            var totalHoje = 0;
+            vendasHoje.forEach(v=>{ 
+                if(porLojaHoje[v[0]]!==undefined) porLojaHoje[v[0]]+=parseFloat(v[1]); 
+                totalHoje+=parseFloat(v[1]); 
+            });
+            document.getElementById('venda-hoje-total').innerText = fmt(totalHoje);
+
+            if(ultimoTotalMes>0 && totalMes>ultimoTotalMes) tocar('som-caixa');
+            ultimoTotalMes = totalMes;
+
+            if(totalHoje>=metaDiaGeral && totalHoje>0 && !metaGeralBatida) { animarVitoria("META GERAL!"); metaGeralBatida=true; }
+
+            // RANKING COMPLETO
+            var ranking = lojasConfig.map(l => {
+                var ac = acumuladoLojas[l.nome] || 0; // Acumulado vindo do Google
+                var sld = l.meta - ac; if(sld<0) sld=0;
+                var md = sld/dias; // Meta Dia Dinâmica
+                var vh = porLojaHoje[l.nome];
+                
+                var pct = 0;
+                if (md > 0) pct = (vh/md)*100;
+                else if (vh > 0) pct = 100;
+                
+                return { 
+                    nome: l.nome, 
+                    metaMensal: l.meta, 
+                    acumulado: ac, 
+                    metaDia: md, 
+                    vendido: vh, 
+                    pct: pct, 
+                    batida: sld<=0 
+                };
+            }).sort((a,b)=>b.vendido-a.vendido);
+
+            ranking.forEach(l => {
+                if((l.vendido>=l.metaDia && l.metaDia>0) || (l.batida && l.vendido>0)) {
+                    if(!lojasBatida.has(l.nome)) { animarVitoria(l.nome); lojasBatida.add(l.nome); }
+                }
+            });
+
+            if(rankingAnterior.length>0) {
+                var mudou=false; var nova=ranking.map(r=>r.nome);
+                for(var i=0;i<nova.length;i++) if(nova[i]!==rankingAnterior[i]) mudou=true;
+                if(mudou) tocar('som-corrida');
+            }
+
+            var tb = document.querySelector('tbody'); tb.innerHTML='';
+            ranking.forEach((r,i)=>{
+                var tr=document.createElement('tr');
+                var cor = r.batida ? 'color:#ffd700' : (r.vendido<(r.metaDia*0.5)?'color:red':'');
+                var metaTxt = r.batida ? "BATIDA!" : fmt(r.metaDia);
+                
+                // CRIAÇÃO DAS COLUNAS
+                tr.innerHTML=`
+                    <td>${i+1}º</td>
+                    <td class="td-nome">${r.nome}</td>
+                    <td style="color:#ffd700">${fmt(r.metaMensal)}</td>
+                    <td style="color:#fff">${fmt(r.acumulado)}</td>
+                    <td style="color:#888">${metaTxt}</td>
+                    <td style="${cor}">${fmt(r.vendido)}</td>
+                    <td>
+                        <div style="width:100%;background:#333;height:4px;margin-bottom:2px">
+                            <div style="width:${Math.min(r.pct,100)}%;background:${r.vendido<(r.metaDia*0.5)?'red':'#00ff00'};height:100%"></div>
+                        </div>
+                        ${r.pct.toFixed(0)}%
+                    </td>`;
+                tb.appendChild(tr);
+            });
+            rankingAnterior = ranking.map(r=>r.nome);
+        } catch(e){}
+    }
+    setInterval(atualizar, 5000);
+</script>
+</body>
+</html>
