@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RANKING APP</title>
+    <title>RANKING CLEAN</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M50 450 L150 250 L250 350 L450 50' stroke='%2339ff14' stroke-width='40' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
@@ -22,33 +21,30 @@
     <style>
         :root {
             --bg: #000000;
-            --neon-green: #39ff14;
-            --neon-blue: #00ffff;
-            --neon-red: #ff073a;
-            --neon-gold: #ffd700;
-            --panel: #050505;
+            --green: #39ff14;
+            --blue: #00ffff;
+            --red: #ff073a;
+            --gold: #ffd700;
+            --panel: #0a0a0a;
         }
 
         body { 
             background: var(--bg); 
-            color: var(--neon-green); 
+            color: var(--green); 
             font-family: 'Montserrat', sans-serif; 
             font-weight: 900; 
             margin: 0; padding: 15px; 
             height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
-            /* Proteção para Iphone não dar zoom ao clicar */
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
+            -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
         }
 
-        /* EFEITO DE NEON NO TEXTO */
-        .glow-green { text-shadow: 0 0 10px var(--neon-green); }
-        .glow-blue { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
-        .glow-red { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
-        .glow-gold { color: var(--neon-gold); text-shadow: 0 0 10px var(--neon-gold); }
-        .glow-white { color: #fff; text-shadow: 0 0 10px #fff; }
+        /* CORES SÓLIDAS (SEM NEON/GLOW) */
+        .text-green { color: var(--green); }
+        .text-blue { color: var(--blue); }
+        .text-red { color: var(--red); }
+        .text-gold { color: var(--gold); }
+        .text-white { color: #fff; }
 
         /* TELA START */
         #overlay-start { 
@@ -59,14 +55,13 @@
         }
         #btn-start { 
             padding: 30px 60px; font-size: 3rem; 
-            background: transparent; color: var(--neon-green);
-            border: 4px solid var(--neon-green); 
+            background: transparent; color: var(--green);
+            border: 4px solid var(--green); 
             font-family: 'Montserrat', sans-serif; font-weight: 900;
-            border-radius: 50px; box-shadow: 0 0 40px var(--neon-green), inset 0 0 20px var(--neon-green);
-            text-shadow: 0 0 20px var(--neon-green);
+            border-radius: 50px; 
             cursor: pointer; animation: pulse 1.5s infinite;
         }
-        @keyframes pulse { 0% {transform: scale(1); opacity: 1;} 50% {transform: scale(1.05); opacity: 0.8;} 100% {transform: scale(1); opacity: 1;} }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
         /* TELA VITÓRIA */
         #overlay-vitoria { 
@@ -75,29 +70,25 @@
             flex-direction: column; align-items: center; justify-content: center; text-align: center; 
         }
         .nome-loja-vitoria { 
-            font-size: 9rem; font-weight: 900; color: var(--neon-gold); text-transform: uppercase; 
-            border: 10px solid var(--neon-gold); padding: 40px; border-radius: 40px; 
-            background: #000; box-shadow: 0 0 100px var(--neon-gold), inset 0 0 30px var(--neon-gold);
-            text-shadow: 0 0 50px var(--neon-gold);
+            font-size: 9rem; font-weight: 900; color: var(--gold); text-transform: uppercase; 
+            border: 10px solid var(--gold); padding: 40px; border-radius: 40px; 
+            background: #000;
             margin-top: 30px; max-width: 95%; line-height: 0.9;
-            animation: piscar 0.2s infinite alternate;
         }
-        @keyframes piscar { from { opacity: 1; } to { opacity: 0.8; transform: scale(1.02); } }
 
         /* HEADER */
         .metas-header { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; 
             margin-bottom: 15px; padding-bottom: 15px; 
-            border-bottom: 4px solid var(--neon-blue); flex-shrink: 0; 
-            box-shadow: 0 10px 20px -10px var(--neon-blue);
+            border-bottom: 4px solid var(--blue); flex-shrink: 0; 
         }
         .meta-card { 
-            background: #0a0a0a; padding: 10px; border: 2px solid #333; 
+            background: #111; padding: 10px; border: 2px solid #333; 
             text-align: center; display: flex; flex-direction: column; justify-content: center; 
             min-height: 110px; border-radius: 15px;
         }
-        .meta-card h3 { margin: 0; font-size: 0.9rem; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 5px var(--neon-blue); }
-        .meta-card .valor { font-size: 2.5rem; font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px currentColor; }
+        .meta-card h3 { margin: 0; font-size: 0.9rem; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+        .meta-card .valor { font-size: 2.5rem; font-weight: 900; margin-top: 5px; }
         
         /* TABELA */
         .ranking-container { flex-grow: 1; overflow-y: auto; }
@@ -106,23 +97,21 @@
         thead tr { position: sticky; top: 0; background: #000; z-index: 2; }
         
         th { 
-            text-align: center; padding: 15px; color: var(--neon-blue); 
-            text-shadow: 0 0 8px var(--neon-blue);
-            border-bottom: 4px solid var(--neon-blue);
+            text-align: center; padding: 15px; color: var(--blue); 
+            border-bottom: 4px solid var(--blue);
             font-size: 1.1rem; text-transform: uppercase;
         }
         
         td { 
-            padding: 15px 10px; background: #080808;
+            padding: 15px 10px; background: #111;
             border-bottom: 1px solid #222; 
             text-align: center; font-size: 1.8rem; 
-            text-shadow: 0 0 5px currentColor;
         }
         
-        .td-nome { text-align: left; padding-left: 20px; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px #fff; }
+        .td-nome { text-align: left; padding-left: 20px; font-size: 1.8rem; color: #fff; }
         
-        .progress-bg { background: #222; height: 12px; width: 100%; border-radius: 6px; box-shadow: inset 0 0 5px #000; }
-        .progress-fill { height: 100%; border-radius: 6px; box-shadow: 0 0 15px currentColor; transition: width 1s ease-out; }
+        .progress-bg { background: #222; height: 12px; width: 100%; border-radius: 6px; }
+        .progress-fill { height: 100%; border-radius: 6px; transition: width 1s ease-out; }
 
         /* RESPONSIVO */
         @media (max-width: 768px) {
@@ -131,7 +120,7 @@
             .metas-header { grid-template-columns: 1fr 1fr; gap: 8px; }
             .meta-card { min-height: 80px; }
             .meta-card .valor { font-size: 1.5rem; }
-            .meta-card:last-child { grid-column: span 2; border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+            .meta-card:last-child { grid-column: span 2; border-color: var(--green); }
             th { font-size: 0.8rem; padding: 5px; }
             td { font-size: 1.1rem; padding: 10px 5px; }
             .td-nome { font-size: 1.1rem; padding-left: 10px; }
@@ -143,11 +132,11 @@
 <body>
 
     <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">INICIAR PAINEL NEON</button>
+        <button id="btn-start">INICIAR SISTEMA</button>
     </div>
     
     <div id="overlay-vitoria">
-        <h1 class="glow-white" style="font-size: 3rem; margin:0; letter-spacing: 5px;">META BATIDA!</h1>
+        <h1 class="text-white" style="font-size: 3rem; margin:0; letter-spacing: 5px;">META BATIDA!</h1>
         <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
     </div>
 
@@ -156,11 +145,11 @@
     <audio id="som-vitoria" src="3.mp3"></audio>
 
     <div class="metas-header">
-        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor glow-green" id="meta-geral">...</span></div>
-        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor glow-white" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor glow-blue" id="meta-quinzena">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor glow-blue" id="meta-semana">...</span></div>
-        <div class="meta-card" style="border-color:var(--neon-green)"><h3>META HOJE</h3><span class="valor glow-green" id="meta-diaria">...</span><small style="color:#fff; font-size:0.9rem; margin-top:5px" id="venda-hoje-total">...</small></div>
+        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor text-green" id="meta-geral">...</span></div>
+        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor text-white" id="acumulado-mes">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor text-blue" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor text-blue" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-color:var(--green)"><h3>META HOJE</h3><span class="valor text-green" id="meta-diaria">...</span><small style="color:#fff; font-size:0.9rem; margin-top:5px" id="venda-hoje-total">...</small></div>
     </div>
 
     <div class="ranking-container">
@@ -169,8 +158,8 @@
                 <tr>
                     <th width="8%">#</th>
                     <th width="28%" style="text-align:left; padding-left:20px">Loja</th>
-                    <th class="mobile-hide" width="15%" style="color:var(--neon-gold); text-shadow: 0 0 10px var(--neon-gold)">Meta</th>
-                    <th width="18%" style="color:#fff; text-shadow: 0 0 10px #fff">Acumulado</th>
+                    <th class="mobile-hide" width="15%" style="color:var(--gold)">Meta</th>
+                    <th width="18%" style="color:#fff">Acumulado</th>
                     <th width="18%">Hoje</th>
                     <th width="13%">%</th>
                 </tr>
@@ -181,9 +170,9 @@
 
 <script>
     // ==========================================
-    // COLE SUA URL DO GOOGLE APPS SCRIPT AQUI:
+    // COLE SUA URL AQUI:
     // ==========================================
-    var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    var WEB_APP_URL = "SUA_URL_AQUI"; 
     // ==========================================
 
     var lojasConfig = [
@@ -213,13 +202,9 @@
         try { var audio = document.getElementById(id); if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); } } catch(e) {}
     }
 
-    // EXPLOSÃO DE CONFETES
     function soltarConfetes() {
         if (typeof confetti === 'function') {
-            // Explosão Inicial
             confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ffff', '#ff0000'], zIndex: 10001 });
-            
-            // Chuva
             var duration = 15000;
             var end = Date.now() + duration;
             (function frame() {
@@ -234,10 +219,8 @@
         var overlay = document.getElementById('overlay-vitoria');
         document.getElementById('nome-loja-animacao').innerText = nome;
         overlay.style.display = 'flex';
-        
         soltarConfetes(); 
         tocar('som-vitoria'); 
-        
         setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
 
@@ -307,5 +290,43 @@
             if (rankingAnterior.length > 0) {
                 var mudou = false;
                 for (var i = 0; i < ranking.length; i++) { if (ranking[i].nome !== rankingAnterior[i]) mudou = true; }
-                if (mudou) tocar('som-corr
+                if (mudou) tocar('som-corrida');
+            }
+            rankingAnterior = ranking.map(function(r) { return r.nome; });
 
+            var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
+            
+            ranking.forEach(function(r, i) {
+                var tr = document.createElement('tr');
+                
+                var corTexto = '#39ff14'; // Verde
+                var corBarra = '#39ff14';
+                
+                if (r.batida) {
+                    corTexto = '#ffd700'; // Ouro
+                    corBarra = '#ffd700';
+                } else if (r.vendido < (r.metaDia * 0.5)) {
+                    corTexto = '#ff073a'; // Vermelho
+                    corBarra = '#ff073a';
+                }
+
+                tr.innerHTML = 
+                    '<td class="text-white">' + (i + 1) + 'º</td>' +
+                    '<td class="td-nome">' + r.nome + '</td>' +
+                    '<td class="mobile-hide" style="color:#ffd700">' + fmt(r.metaMensal) + '</td>' +
+                    '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
+                    '<td style="color:' + corTexto + '">' + fmt(r.vendido) + '</td>' +
+                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '"></div></div>' + 
+                    '<span style="color:' + corTexto + '">' + r.pct.toFixed(0) + '%</span></td>';
+                
+                tbody.appendChild(tr);
+            });
+
+        }).catch(function(e) { console.log(e); });
+    }
+
+    setInterval(atualizar, 5000);
+
+</script>
+</body>
+</html>
