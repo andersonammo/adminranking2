@@ -3,79 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RANKING FESTA LONGA</title>
+    <title>RANKING NEON TOTAL</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
+        :root {
+            --bg: #000000;
+            --neon-green: #39ff14;
+            --neon-blue: #00ffff;
+            --neon-red: #ff073a;
+            --neon-gold: #ffd700;
+            --panel: #050505;
+        }
+
         body { 
-            background: #000; color: #00ff00; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; padding: 10px; 
+            background: var(--bg); 
+            color: var(--neon-green); 
+            font-family: 'Montserrat', sans-serif; /* FONTE NOVA */
+            font-weight: 900; /* EXTRA BOLD */
+            margin: 0; padding: 15px; 
             height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
         }
 
-        /* TELA START - Agora com cursor pointer forçado */
+        /* EFEITO DE NEON NO TEXTO */
+        .glow-green { text-shadow: 0 0 10px var(--neon-green); }
+        .glow-blue { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .glow-red { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+        .glow-gold { color: var(--neon-gold); text-shadow: 0 0 10px var(--neon-gold); }
+        .glow-white { color: #fff; text-shadow: 0 0 10px #fff; }
+
+        /* TELA START */
         #overlay-start { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; z-index: 9999; 
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; /* Mãozinha para indicar clique */
+            cursor: pointer; 
         }
         #btn-start { 
-            padding: 20px 40px; font-size: 2rem; background: #00ff00; 
-            border: none; font-weight: bold; cursor: pointer; 
-            border-radius: 50px; box-shadow: 0 0 20px #00ff00;
-            animation: pulse 1.5s infinite;
+            padding: 30px 60px; font-size: 3rem; 
+            background: transparent; color: var(--neon-green);
+            border: 4px solid var(--neon-green); 
+            font-family: 'Montserrat', sans-serif; font-weight: 900;
+            border-radius: 50px; box-shadow: 0 0 40px var(--neon-green), inset 0 0 20px var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            cursor: pointer; animation: pulse 1.5s infinite;
         }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+        @keyframes pulse { 0% {transform: scale(1); opacity: 1;} 50% {transform: scale(1.05); opacity: 0.8;} 100% {transform: scale(1); opacity: 1;} }
 
         /* TELA VITÓRIA */
         #overlay-vitoria { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 10000; 
+            background: rgba(0,0,0,0.95); z-index: 10000; 
             flex-direction: column; align-items: center; justify-content: center; text-align: center; 
         }
         .nome-loja-vitoria { 
-            font-size: 4rem; font-weight: bold; color: #ffd700; text-transform: uppercase; 
-            border: 4px solid #ffd700; padding: 20px; border-radius: 20px; 
-            background: #000; box-shadow: 0 0 50px #ffd700;
-            margin-top: 20px; max-width: 90%;
-            animation: piscar 0.5s infinite alternate;
+            font-size: 9rem; font-weight: 900; color: var(--neon-gold); text-transform: uppercase; 
+            border: 10px solid var(--neon-gold); padding: 40px; border-radius: 40px; 
+            background: #000; box-shadow: 0 0 100px var(--neon-gold), inset 0 0 30px var(--neon-gold);
+            text-shadow: 0 0 50px var(--neon-gold);
+            margin-top: 30px; max-width: 95%; line-height: 0.9;
+            animation: piscar 0.2s infinite alternate;
         }
-        @keyframes piscar { from { opacity: 1; } to { opacity: 0.7; } }
+        @keyframes piscar { from { opacity: 1; } to { opacity: 0.8; transform: scale(1.02); } }
 
-        /* HEADER E TABELA */
-        .metas-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #00ff00; flex-shrink: 0; }
-        .meta-card { background: #111; padding: 5px; border: 1px solid #333; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 60px; }
-        .meta-card h3 { margin: 0; font-size: 0.7rem; color: #888; text-transform: uppercase; }
-        .meta-card .valor { font-size: 1.1rem; font-weight: bold; }
+        /* HEADER */
+        .metas-header { 
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; 
+            margin-bottom: 15px; padding-bottom: 15px; 
+            border-bottom: 4px solid var(--neon-blue); flex-shrink: 0; 
+            box-shadow: 0 10px 20px -10px var(--neon-blue);
+        }
+        .meta-card { 
+            background: #0a0a0a; padding: 10px; border: 2px solid #333; 
+            text-align: center; display: flex; flex-direction: column; justify-content: center; 
+            min-height: 110px; border-radius: 15px;
+        }
+        /* AQUI SUBSTITUÍMOS O CINZA POR AZUL NEON */
+        .meta-card h3 { margin: 0; font-size: 0.9rem; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 5px var(--neon-blue); }
+        .meta-card .valor { font-size: 2.5rem; font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px currentColor; }
         
+        /* TABELA */
         .ranking-container { flex-grow: 1; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        thead tr { position: sticky; top: 0; background: #000; border-bottom: 2px solid #00ff00; z-index: 2; }
-        th { text-align: center; padding: 5px; color: #888; border-right: 1px solid #222; font-size: 0.8rem; }
-        td { padding: 5px; border-bottom: 1px solid #222; border-right: 1px solid #222; text-align: center; font-weight: bold; }
-        .td-nome { text-align: left; padding-left: 5px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
         
+        thead tr { position: sticky; top: 0; background: #000; z-index: 2; }
+        
+        /* CABEÇALHO DA TABELA EM AZUL NEON */
+        th { 
+            text-align: center; padding: 15px; color: var(--neon-blue); 
+            text-shadow: 0 0 8px var(--neon-blue);
+            border-bottom: 4px solid var(--neon-blue);
+            font-size: 1.1rem; text-transform: uppercase;
+        }
+        
+        td { 
+            padding: 15px 10px; background: #080808;
+            border-bottom: 1px solid #222; 
+            text-align: center; font-size: 1.8rem; /* NÚMEROS GRANDES */
+            text-shadow: 0 0 5px currentColor;
+        }
+        
+        .td-nome { text-align: left; padding-left: 20px; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px #fff; }
+        
+        /* BARRAS DE PROGRESSO NEON */
+        .progress-bg { background: #222; height: 12px; width: 100%; border-radius: 6px; box-shadow: inset 0 0 5px #000; }
+        .progress-fill { height: 100%; border-radius: 6px; box-shadow: 0 0 15px currentColor; transition: width 1s ease-out; }
+
         /* RESPONSIVO */
         @media (max-width: 768px) {
-            .metas-header { grid-template-columns: 1fr 1fr; }
-            .meta-card:last-child { grid-column: span 2; border: 1px solid #00ff00; }
+            body { padding: 5px; }
+            #btn-start { font-size: 1.5rem; padding: 20px; }
+            .metas-header { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .meta-card { min-height: 80px; }
+            .meta-card .valor { font-size: 1.5rem; }
+            .meta-card:last-child { grid-column: span 2; border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
+            
+            th { font-size: 0.8rem; padding: 5px; }
+            td { font-size: 1.1rem; padding: 10px 5px; }
+            .td-nome { font-size: 1.1rem; padding-left: 10px; }
+            
             .mobile-hide { display: none; }
-            .nome-loja-vitoria { font-size: 2rem; }
+            .nome-loja-vitoria { font-size: 3rem; border-width: 4px; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
     <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">CLIQUE PARA INICIAR</button>
+        <button id="btn-start">INICIAR PAINEL NEON</button>
     </div>
     
     <div id="overlay-vitoria">
-        <h1 style="color:white; margin:0">META BATIDA!</h1>
+        <h1 class="glow-white" style="font-size: 3rem; margin:0; letter-spacing: 5px;">META BATIDA!</h1>
         <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
     </div>
 
@@ -84,23 +149,23 @@
     <audio id="som-vitoria" src="3.mp3"></audio>
 
     <div class="metas-header">
-        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor" id="meta-geral">...</span></div>
-        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor" id="meta-quinzena">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor" id="meta-semana">...</span></div>
-        <div class="meta-card" style="border-color:#00ff00"><h3>META HOJE</h3><span class="valor" id="meta-diaria">...</span><small style="color:#fff; font-size:0.7rem" id="venda-hoje-total">...</small></div>
+        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor glow-green" id="meta-geral">...</span></div>
+        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor glow-white" id="acumulado-mes">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor glow-blue" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor glow-blue" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-color:var(--neon-green)"><h3>META HOJE</h3><span class="valor glow-green" id="meta-diaria">...</span><small style="color:#fff; font-size:0.9rem; margin-top:5px" id="venda-hoje-total">...</small></div>
     </div>
 
     <div class="ranking-container">
         <table id="tabela-ranking">
             <thead>
                 <tr>
-                    <th width="10%">#</th>
-                    <th width="30%" class="td-nome">Loja</th>
-                    <th class="mobile-hide" width="15%" style="color:#ffd700">Meta</th>
-                    <th width="20%" style="color:#fff">Acumulado</th>
-                    <th width="15%">Hoje</th>
-                    <th width="10%">%</th>
+                    <th width="8%">#</th>
+                    <th width="28%" style="text-align:left; padding-left:20px">Loja</th>
+                    <th class="mobile-hide" width="15%" style="color:var(--neon-gold); text-shadow: 0 0 10px var(--neon-gold)">Meta</th>
+                    <th width="18%" style="color:#fff; text-shadow: 0 0 10px #fff">Acumulado</th>
+                    <th width="18%">Hoje</th>
+                    <th width="13%">%</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -109,7 +174,7 @@
 
 <script>
     // ==========================================
-    // COLE SUA URL ABAIXO (DENTRO DAS ASPAS):
+    // COLE SUA URL DO GOOGLE APPS SCRIPT AQUI:
     // ==========================================
     var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
     // ==========================================
@@ -125,41 +190,36 @@
     var rankingAnterior = [];
     var ultimoTotalMes = 0;
     var sistemaIniciado = false;
-    var lojasBatida = []; // Array simples para compatibilidade
+    var lojasBatida = [];
 
-    // Função separada para tentar iniciar áudio
     function tentarIniciar() {
         sistemaIniciado = true;
         try {
             var audio = document.getElementById('som-caixa');
-            audio.play().then(function() { 
-                audio.pause(); 
-                audio.currentTime = 0; 
-            }).catch(function(e) { console.log("Audio bloqueado inicialmente"); });
+            audio.play().then(function() { audio.pause(); audio.currentTime = 0; }).catch(function(e) {});
         } catch(e) {}
         atualizar();
     }
 
     function tocar(id) {
         if (!sistemaIniciado) return;
-        try {
-            var audio = document.getElementById(id);
-            if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); }
-        } catch(e) {}
+        try { var audio = document.getElementById(id); if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); } } catch(e) {}
     }
 
-    // Função de efeitos (Confetes) com DURAÇÃO DE 15 SEGUNDOS
+    // --- FUNÇÃO DE EXPLOSÃO IMEDIATA DE CONFETES ---
     function soltarConfetes() {
         if (typeof confetti === 'function') {
-            try {
-                var duration = 15000; // 15 SEGUNDOS DE FESTA
-                var end = Date.now() + duration;
-                (function frame() {
-                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#00ff00'] });
-                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#00ff00'] });
-                    if (Date.now() < end) requestAnimationFrame(frame);
-                }());
-            } catch(e) {}
+            // 1. EXPLOSÃO INICIAL (O "ESTOURO")
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ffff', '#ff0000'], zIndex: 10001 });
+            
+            // 2. CHUVA CONTÍNUA
+            var duration = 15000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#00ffff', '#39ff14'], zIndex: 10001 });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#00ffff', '#39ff14'], zIndex: 10001 });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
         }
     }
 
@@ -168,24 +228,20 @@
         document.getElementById('nome-loja-animacao').innerText = nome;
         
         overlay.style.display = 'flex';
-        tocar('som-vitoria');
-        soltarConfetes();
         
-        // Tela some após 15 segundos
+        // ORDEM DE AÇÃO:
+        soltarConfetes(); // 1. Estoura confete IMEDIATAMENTE
+        tocar('som-vitoria'); // 2. Toca o som
+        
         setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
 
-    function fmt(v) { 
-        return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); 
-    }
+    function fmt(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
 
     function getDiasRest() {
-        var hoje = new Date();
-        var dia = hoje.getDate();
-        var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+        var hoje = new Date(); var dia = hoje.getDate(); var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
         if (dia >= ult) return 1;
-        var uteis = Math.floor((ult - dia) * (24 / 28));
-        return uteis > 0 ? uteis : 1;
+        var uteis = Math.floor((ult - dia) * (24 / 28)); return uteis > 0 ? uteis : 1;
     }
 
     function atualizar() {
@@ -198,7 +254,6 @@
             var totalMes = parseFloat(dados.totalMes);
             var acumuladoLojas = dados.acumuladoPorLoja || {};
 
-            // Atualiza Header
             var metaGeral = lojasConfig.reduce(function(a, b) { return a + b.meta; }, 0);
             document.getElementById('meta-geral').innerText = fmt(metaGeral);
             document.getElementById('acumulado-mes').innerText = fmt(totalMes);
@@ -211,22 +266,17 @@
             document.getElementById('meta-quinzena').innerText = fmt(metaDiaGeral * 12);
             document.getElementById('meta-semana').innerText = fmt(metaDiaGeral * 6);
 
-            // Calcula vendas de hoje
-            var porLojaHoje = {};
-            var totalHoje = 0;
+            var porLojaHoje = {}; var totalHoje = 0;
             lojasConfig.forEach(function(l) { porLojaHoje[l.nome] = 0; });
-            
             vendasHoje.forEach(function(v) {
                 if (porLojaHoje[v[0]] !== undefined) porLojaHoje[v[0]] += parseFloat(v[1]);
                 totalHoje += parseFloat(v[1]);
             });
             document.getElementById('venda-hoje-total').innerText = fmt(totalHoje);
 
-            // Som de Caixa
             if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) tocar('som-caixa');
             ultimoTotalMes = totalMes;
 
-            // Ranking
             var ranking = lojasConfig.map(function(l) {
                 var ac = acumuladoLojas[l.nome] || 0;
                 var sld = l.meta - ac; if (sld < 0) sld = 0;
@@ -234,52 +284,53 @@
                 var vh = porLojaHoje[l.nome];
                 var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
                 
-                return {
-                    nome: l.nome, metaMensal: l.meta, acumulado: ac,
-                    metaDia: md, vendido: vh, pct: pct, batida: sld <= 0
-                };
+                return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sld <= 0 };
             }).sort(function(a, b) { return b.vendido - a.vendido; });
 
-            // Verifica Vitórias
             ranking.forEach(function(l) {
                 var bateuHoje = (l.vendido >= l.metaDia && l.metaDia > 0);
                 var bateuMes = (l.batida && l.vendido > 0);
                 
                 if (bateuHoje || bateuMes) {
                     if (lojasBatida.indexOf(l.nome) === -1) {
-                        animarVitoria(l.nome);
+                        animarVitoria(l.nome); // CHAMA A VITÓRIA
                         lojasBatida.push(l.nome);
                     }
                 }
             });
 
-            // Som de Ultrapassagem
             if (rankingAnterior.length > 0) {
                 var mudou = false;
-                for (var i = 0; i < ranking.length; i++) {
-                    if (ranking[i].nome !== rankingAnterior[i]) mudou = true;
-                }
+                for (var i = 0; i < ranking.length; i++) { if (ranking[i].nome !== rankingAnterior[i]) mudou = true; }
                 if (mudou) tocar('som-corrida');
             }
             rankingAnterior = ranking.map(function(r) { return r.nome; });
 
-            // Renderiza Tabela
-            var tbody = document.querySelector('tbody');
-            tbody.innerHTML = '';
+            var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
             
             ranking.forEach(function(r, i) {
                 var tr = document.createElement('tr');
-                var corVenda = r.batida ? 'color:#ffd700' : (r.vendido < (r.metaDia * 0.5) ? 'color:red' : '#00ff00');
-                var barraCor = r.vendido < (r.metaDia * 0.5) ? 'red' : '#00ff00';
-                var pctShow = Math.min(r.pct, 100);
+                
+                // CORES NEON PARA A TABELA
+                var corTexto = '#39ff14'; // Verde Neon Padrão
+                var corBarra = '#39ff14'; // Verde Neon Padrão
+                
+                if (r.batida) {
+                    corTexto = '#ffd700'; // Dourado
+                    corBarra = '#ffd700';
+                } else if (r.vendido < (r.metaDia * 0.5)) {
+                    corTexto = '#ff073a'; // Vermelho Neon
+                    corBarra = '#ff073a';
+                }
 
                 tr.innerHTML = 
-                    '<td>' + (i + 1) + 'º</td>' +
+                    '<td class="glow-white">' + (i + 1) + 'º</td>' +
                     '<td class="td-nome">' + r.nome + '</td>' +
-                    '<td class="mobile-hide" style="color:#ffd700">' + fmt(r.metaMensal) + '</td>' +
-                    '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
-                    '<td style="' + corVenda + '">' + fmt(r.vendido) + '</td>' +
-                    '<td><div style="background:#333;height:4px;width:100%"><div style="height:100%;width:' + pctShow + '%;background:' + barraCor + '"></div></div>' + r.pct.toFixed(0) + '%</td>';
+                    '<td class="mobile-hide" style="color:#ffd700; text-shadow:0 0 10px #ffd700">' + fmt(r.metaMensal) + '</td>' +
+                    '<td style="color:#fff; text-shadow:0 0 10px #fff">' + fmt(r.acumulado) + '</td>' +
+                    '<td style="color:' + corTexto + '; text-shadow:0 0 10px ' + corTexto + '">' + fmt(r.vendido) + '</td>' +
+                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '; box-shadow: 0 0 15px ' + corBarra + '"></div></div>' + 
+                    '<span style="color:' + corTexto + '">' + r.pct.toFixed(0) + '%</span></td>';
                 
                 tbody.appendChild(tr);
             });
@@ -287,10 +338,8 @@
         }).catch(function(e) { console.log(e); });
     }
 
-    // Loop de atualização
     setInterval(atualizar, 5000);
 
 </script>
 </body>
 </html>
-
