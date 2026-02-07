@@ -2,9 +2,17 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RANKING NEON TOTAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RANKING NEON APP</title>
     
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M50 450 L150 250 L250 350 L450 50' stroke='%2339ff14' stroke-width='40' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M50 450 L150 250 L250 350 L450 50' stroke='%2339ff14' stroke-width='40' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
@@ -24,11 +32,15 @@
         body { 
             background: var(--bg); 
             color: var(--neon-green); 
-            font-family: 'Montserrat', sans-serif; /* FONTE NOVA */
-            font-weight: 900; /* EXTRA BOLD */
+            font-family: 'Montserrat', sans-serif; 
+            font-weight: 900; 
             margin: 0; padding: 15px; 
             height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
+            /* Proteção para Iphone não dar zoom ao clicar */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         /* EFEITO DE NEON NO TEXTO */
@@ -84,7 +96,6 @@
             text-align: center; display: flex; flex-direction: column; justify-content: center; 
             min-height: 110px; border-radius: 15px;
         }
-        /* AQUI SUBSTITUÍMOS O CINZA POR AZUL NEON */
         .meta-card h3 { margin: 0; font-size: 0.9rem; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 5px var(--neon-blue); }
         .meta-card .valor { font-size: 2.5rem; font-weight: 900; margin-top: 5px; text-shadow: 0 0 10px currentColor; }
         
@@ -94,7 +105,6 @@
         
         thead tr { position: sticky; top: 0; background: #000; z-index: 2; }
         
-        /* CABEÇALHO DA TABELA EM AZUL NEON */
         th { 
             text-align: center; padding: 15px; color: var(--neon-blue); 
             text-shadow: 0 0 8px var(--neon-blue);
@@ -105,13 +115,12 @@
         td { 
             padding: 15px 10px; background: #080808;
             border-bottom: 1px solid #222; 
-            text-align: center; font-size: 1.8rem; /* NÚMEROS GRANDES */
+            text-align: center; font-size: 1.8rem; 
             text-shadow: 0 0 5px currentColor;
         }
         
         .td-nome { text-align: left; padding-left: 20px; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px #fff; }
         
-        /* BARRAS DE PROGRESSO NEON */
         .progress-bg { background: #222; height: 12px; width: 100%; border-radius: 6px; box-shadow: inset 0 0 5px #000; }
         .progress-fill { height: 100%; border-radius: 6px; box-shadow: 0 0 15px currentColor; transition: width 1s ease-out; }
 
@@ -123,11 +132,9 @@
             .meta-card { min-height: 80px; }
             .meta-card .valor { font-size: 1.5rem; }
             .meta-card:last-child { grid-column: span 2; border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
-            
             th { font-size: 0.8rem; padding: 5px; }
             td { font-size: 1.1rem; padding: 10px 5px; }
             .td-nome { font-size: 1.1rem; padding-left: 10px; }
-            
             .mobile-hide { display: none; }
             .nome-loja-vitoria { font-size: 3rem; border-width: 4px; padding: 20px; }
         }
@@ -176,7 +183,7 @@
     // ==========================================
     // COLE SUA URL DO GOOGLE APPS SCRIPT AQUI:
     // ==========================================
-    var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    var WEB_APP_URL = "SUA_URL_AQUI"; 
     // ==========================================
 
     var lojasConfig = [
@@ -206,13 +213,13 @@
         try { var audio = document.getElementById(id); if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); } } catch(e) {}
     }
 
-    // --- FUNÇÃO DE EXPLOSÃO IMEDIATA DE CONFETES ---
+    // EXPLOSÃO DE CONFETES
     function soltarConfetes() {
         if (typeof confetti === 'function') {
-            // 1. EXPLOSÃO INICIAL (O "ESTOURO")
+            // Explosão Inicial
             confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ffff', '#ff0000'], zIndex: 10001 });
             
-            // 2. CHUVA CONTÍNUA
+            // Chuva
             var duration = 15000;
             var end = Date.now() + duration;
             (function frame() {
@@ -226,12 +233,10 @@
     function animarVitoria(nome) {
         var overlay = document.getElementById('overlay-vitoria');
         document.getElementById('nome-loja-animacao').innerText = nome;
-        
         overlay.style.display = 'flex';
         
-        // ORDEM DE AÇÃO:
-        soltarConfetes(); // 1. Estoura confete IMEDIATAMENTE
-        tocar('som-vitoria'); // 2. Toca o som
+        soltarConfetes(); 
+        tocar('som-vitoria'); 
         
         setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
@@ -293,7 +298,7 @@
                 
                 if (bateuHoje || bateuMes) {
                     if (lojasBatida.indexOf(l.nome) === -1) {
-                        animarVitoria(l.nome); // CHAMA A VITÓRIA
+                        animarVitoria(l.nome); 
                         lojasBatida.push(l.nome);
                     }
                 }
@@ -302,44 +307,4 @@
             if (rankingAnterior.length > 0) {
                 var mudou = false;
                 for (var i = 0; i < ranking.length; i++) { if (ranking[i].nome !== rankingAnterior[i]) mudou = true; }
-                if (mudou) tocar('som-corrida');
-            }
-            rankingAnterior = ranking.map(function(r) { return r.nome; });
-
-            var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
-            
-            ranking.forEach(function(r, i) {
-                var tr = document.createElement('tr');
-                
-                // CORES NEON PARA A TABELA
-                var corTexto = '#39ff14'; // Verde Neon Padrão
-                var corBarra = '#39ff14'; // Verde Neon Padrão
-                
-                if (r.batida) {
-                    corTexto = '#ffd700'; // Dourado
-                    corBarra = '#ffd700';
-                } else if (r.vendido < (r.metaDia * 0.5)) {
-                    corTexto = '#ff073a'; // Vermelho Neon
-                    corBarra = '#ff073a';
-                }
-
-                tr.innerHTML = 
-                    '<td class="glow-white">' + (i + 1) + 'º</td>' +
-                    '<td class="td-nome">' + r.nome + '</td>' +
-                    '<td class="mobile-hide" style="color:#ffd700; text-shadow:0 0 10px #ffd700">' + fmt(r.metaMensal) + '</td>' +
-                    '<td style="color:#fff; text-shadow:0 0 10px #fff">' + fmt(r.acumulado) + '</td>' +
-                    '<td style="color:' + corTexto + '; text-shadow:0 0 10px ' + corTexto + '">' + fmt(r.vendido) + '</td>' +
-                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '; box-shadow: 0 0 15px ' + corBarra + '"></div></div>' + 
-                    '<span style="color:' + corTexto + '">' + r.pct.toFixed(0) + '%</span></td>';
-                
-                tbody.appendChild(tr);
-            });
-
-        }).catch(function(e) { console.log(e); });
-    }
-
-    setInterval(atualizar, 5000);
-
-</script>
-</body>
-</html>
+                if (mudou) tocar('som-corr
