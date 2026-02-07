@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RANKING COMPATIVEL</title>
+    <title>RANKING FESTA LONGA</title>
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -111,7 +111,7 @@
     // ==========================================
     // COLE SUA URL ABAIXO (DENTRO DAS ASPAS):
     // ==========================================
-    var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    var WEB_APP_URL = "SUA_URL_AQUI"; 
     // ==========================================
 
     var lojasConfig = [
@@ -148,11 +148,11 @@
         } catch(e) {}
     }
 
-    // Função de efeitos (Confetes) com proteção contra falha
+    // Função de efeitos (Confetes) com DURAÇÃO DE 15 SEGUNDOS
     function soltarConfetes() {
         if (typeof confetti === 'function') {
             try {
-                var duration = 5000;
+                var duration = 15000; // 15 SEGUNDOS DE FESTA
                 var end = Date.now() + duration;
                 (function frame() {
                     confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#00ff00'] });
@@ -166,10 +166,13 @@
     function animarVitoria(nome) {
         var overlay = document.getElementById('overlay-vitoria');
         document.getElementById('nome-loja-animacao').innerText = nome;
+        
         overlay.style.display = 'flex';
         tocar('som-vitoria');
         soltarConfetes();
-        setTimeout(function() { overlay.style.display = 'none'; }, 6000);
+        
+        // Tela some após 15 segundos
+        setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
 
     function fmt(v) { 
@@ -243,7 +246,6 @@
                 var bateuMes = (l.batida && l.vendido > 0);
                 
                 if (bateuHoje || bateuMes) {
-                    // Verifica se já tocou para esta loja
                     if (lojasBatida.indexOf(l.nome) === -1) {
                         animarVitoria(l.nome);
                         lojasBatida.push(l.nome);
@@ -291,4 +293,3 @@
 </script>
 </body>
 </html>
-
