@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>APP RANKING</title>
+    <title>STOCK MARKET RANKING</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,25 +14,29 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --bg: #000000;
-            --stock-green: #00ff00; /* Verde Ticker Puro */
-            --stock-red: #ff3333;   /* Vermelho Ticker Puro */
+            --stock-green: #00ff00; 
+            --stock-red: #ff3333;   
             --stock-blue: #00ccff;
             --stock-gold: #ffcc00;
             --text-gray: #666666;
             --border-color: #222222;
         }
 
+        /* APLICAÇÃO GERAL DA FONTE MONTSERRAT */
+        body, button, input, select, table, th, td, h1, h2, h3, span, div {
+            font-family: 'Montserrat', sans-serif !important; 
+        }
+
         body { 
             background: var(--bg); 
             color: #ffffff; 
-            font-family: 'Montserrat', sans-serif; 
             font-weight: 700; 
             margin: 0; padding: 10px; 
             height: 100vh; overflow: hidden;
@@ -58,7 +62,7 @@
             padding: 25px 50px; font-size: 2rem; 
             background: #000; color: var(--stock-green);
             border: 2px solid var(--stock-green); 
-            font-family: 'Montserrat', sans-serif; font-weight: 900;
+            font-weight: 900;
             text-transform: uppercase; letter-spacing: 2px;
             cursor: pointer; transition: 0.2s;
         }
@@ -86,7 +90,7 @@
         }
         .meta-card { 
             background: #080808; padding: 10px; 
-            text-align: right; /* Alinhamento financeiro */
+            text-align: right; 
             display: flex; flex-direction: column; justify-content: center; 
             min-height: 80px; border-left: 2px solid var(--border-color);
         }
@@ -100,13 +104,11 @@
         thead tr { position: sticky; top: 0; background: #000; z-index: 2; border-bottom: 2px solid var(--text-gray); }
         
         th { 
-            text-align: right; /* Cabeçalhos à direita */
+            text-align: right; 
             padding: 10px; color: var(--text-gray); 
             font-size: 0.9rem; text-transform: uppercase; font-weight: 700;
         }
-        /* Primeira coluna alinhada à esquerda */
         th:first-child, td:first-child { text-align: left; }
-        /* Coluna Loja alinhada à esquerda */
         th:nth-child(2), td:nth-child(2) { text-align: left; }
 
         td { 
@@ -142,7 +144,7 @@
 <body>
 
     <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">ABRIR MERCADO</button>
+        <button id="btn-start">INICIAR GRÁFICO</button>
     </div>
     
     <div id="overlay-vitoria">
@@ -170,7 +172,8 @@
                     <th width="25%">ATIVO (LOJA)</th>
                     <th class="mobile-hide" width="12%">MENSAL</th>
                     <th width="15%">ACUMULADO</th>
-                    <th width="15%" style="color:#fff">META DIA</th> <th width="15%">HOJE</th>
+                    <th width="15%" style="color:#fff">META DIA</th>
+                    <th width="15%">HOJE</th>
                     <th width="13%">VAR(%)</th>
                 </tr>
             </thead>
@@ -234,7 +237,6 @@
         setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
 
-    // Formatação financeira padrão (sem centavos para limpar)
     function fmt(v) { return v.toLocaleString('pt-BR', {style:'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
 
@@ -274,22 +276,53 @@
             });
             document.getElementById('venda-hoje-total').innerText = fmtM(totalHoje);
 
-            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) tocar('som-caixa');
+            // --- LÓGICA DO SOM DE CAIXA (Som 1) ---
+            // Toca apenas se o total do mês aumentou (alguém vendeu)
+            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) {
+                tocar('som-caixa');
+            }
             ultimoTotalMes = totalMes;
 
+            // --- CÁLCULO DO RANKING ---
             var ranking = lojasConfig.map(function(l) {
                 var ac = acumuladoLojas[l.nome] || 0;
                 var sld = l.meta - ac; if (sld < 0) sld = 0;
-                
-                // CÁLCULO DA META DIÁRIA INDIVIDUAL DA LOJA
                 var md = sld / dias; 
-                
                 var vh = porLojaHoje[l.nome];
                 var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
                 
                 return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sld <= 0 };
-            }).sort(function(a, b) { return b.vendido - a.vendido; });
+            });
 
+            // --- ORDENAÇÃO ESTÁVEL (CORREÇÃO DO SOM DE CARRO) ---
+            // Se as vendas forem iguais, ordena pelo nome. Isso impede que o ranking mude "do nada" e toque o som errado.
+            ranking.sort(function(a, b) {
+                if (b.vendido === a.vendido) {
+                    return a.nome.localeCompare(b.nome); // Desempate alfabético
+                }
+                return b.vendido - a.vendido;
+            });
+
+            // --- LÓGICA DO SOM DE CORRIDA (Som 2) ---
+            if (rankingAnterior.length > 0) {
+                var mudou = false;
+                for (var i = 0; i < ranking.length; i++) {
+                    // Verifica se a loja na posição i é diferente da anterior
+                    if (ranking[i].nome !== rankingAnterior[i]) {
+                        mudou = true;
+                        break;
+                    }
+                }
+                // Só toca se houve mudança real na ordem
+                if (mudou) {
+                    tocar('som-corrida');
+                }
+            }
+            
+            // Salva o ranking atual para comparar na próxima volta
+            rankingAnterior = ranking.map(function(r) { return r.nome; });
+
+            // --- VERIFICAÇÃO DE VITÓRIAS ---
             ranking.forEach(function(l) {
                 var bateuHoje = (l.vendido >= l.metaDia && l.metaDia > 0);
                 var bateuMes = (l.batida && l.vendido > 0);
@@ -302,19 +335,13 @@
                 }
             });
 
-            if (rankingAnterior.length > 0) {
-                var mudou = false;
-                for (var i = 0; i < ranking.length; i++) { if (ranking[i].nome !== rankingAnterior[i]) mudou = true; }
-                if (mudou) tocar('som-corrida');
-            }
-            rankingAnterior = ranking.map(function(r) { return r.nome; });
-
+            // --- RENDERIZAÇÃO DA TABELA ---
             var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
             
             ranking.forEach(function(r, i) {
                 var tr = document.createElement('tr');
                 
-                // Cores de Ação (Bolsa de Valores)
+                // Cores de Ação
                 var corTexto = '#00ff00'; // Verde Ticker
                 var corBarra = '#00ff00';
                 
@@ -331,10 +358,7 @@
                     '<td class="td-nome">' + r.nome + '</td>' +
                     '<td class="mobile-hide muted">' + fmt(r.metaMensal) + '</td>' +
                     '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
-                    
-                    // NOVA COLUNA: META DIÁRIA INDIVIDUAL
                     '<td style="color:#fff; font-weight:bold">' + fmt(r.metaDia) + '</td>' +
-                    
                     '<td style="color:' + corTexto + '">' + fmt(r.vendido) + '</td>' +
                     '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '"></div></div>' + 
                     '<span style="color:' + corTexto + '; font-size:0.9rem">' + r.pct.toFixed(1) + '%</span></td>';
@@ -350,5 +374,3 @@
 </script>
 </body>
 </html>
-
-
