@@ -2,86 +2,80 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RANKING BLINDADO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKING COMPATIVEL</title>
     
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" onerror="console.log('Confetes não carregaram (Sem internet?), ignorando.')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root { --bg: #000; --text: #00ff00; --alert: #ff0000; --panel: #0a0a0a; --gold: #ffd700; }
         body { 
-            background: var(--bg); color: var(--text); 
+            background: #000; color: #00ff00; 
             font-family: 'Courier New', monospace; 
             margin: 0; padding: 10px; 
             height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
         }
 
-        /* --- TELA START --- */
-        #overlay-start { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        #btn-start { padding: 20px 40px; font-size: 2rem; background: #00ff00; border: none; font-weight: bold; cursor: pointer; animation: pulse 2s infinite; border-radius: 50px; box-shadow: 0 0 20px #00ff00; }
+        /* TELA START - Agora com cursor pointer forçado */
+        #overlay-start { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000; z-index: 9999; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; /* Mãozinha para indicar clique */
+        }
+        #btn-start { 
+            padding: 20px 40px; font-size: 2rem; background: #00ff00; 
+            border: none; font-weight: bold; cursor: pointer; 
+            border-radius: 50px; box-shadow: 0 0 20px #00ff00;
+            animation: pulse 1.5s infinite;
+        }
         @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
 
-        /* --- ANIMAÇÃO VITÓRIA --- */
+        /* TELA VITÓRIA */
         #overlay-vitoria { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
+            background: rgba(0,0,0,0.9); z-index: 10000; 
+            flex-direction: column; align-items: center; justify-content: center; text-align: center; 
         }
-        
         .nome-loja-vitoria { 
-            font-size: 5rem; font-weight: bold; color: var(--gold); text-transform: uppercase; 
-            animation: neon 0.8s infinite alternate, zoomEntrada 0.5s ease-out; 
-            border: 4px solid var(--gold); padding: 30px; border-radius: 20px; 
-            box-shadow: 0 0 50px var(--gold), inset 0 0 20px var(--gold);
-            background: rgba(0,0,0,0.8);
-            max-width: 90%; word-wrap: break-word;
+            font-size: 4rem; font-weight: bold; color: #ffd700; text-transform: uppercase; 
+            border: 4px solid #ffd700; padding: 20px; border-radius: 20px; 
+            background: #000; box-shadow: 0 0 50px #ffd700;
+            margin-top: 20px; max-width: 90%;
+            animation: piscar 0.5s infinite alternate;
         }
+        @keyframes piscar { from { opacity: 1; } to { opacity: 0.7; } }
+
+        /* HEADER E TABELA */
+        .metas-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #00ff00; flex-shrink: 0; }
+        .meta-card { background: #111; padding: 5px; border: 1px solid #333; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 60px; }
+        .meta-card h3 { margin: 0; font-size: 0.7rem; color: #888; text-transform: uppercase; }
+        .meta-card .valor { font-size: 1.1rem; font-weight: bold; }
         
-        .titulo-vitoria {
-            font-size: 3rem; color: #fff; margin-bottom: 20px; letter-spacing: 5px; text-shadow: 0 0 10px #fff;
-            animation: piscar 0.5s infinite;
-        }
-
-        @keyframes neon { from { text-shadow: 0 0 10px var(--gold); transform: scale(1); } to { text-shadow: 0 0 40px var(--gold), 0 0 80px var(--text); transform: scale(1.05); } }
-        @keyframes zoomEntrada { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes piscar { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        /* --- HEADER --- */
-        .metas-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; border-bottom: 2px solid var(--text); padding-bottom: 10px; flex-shrink: 0; }
-        .meta-card { background: var(--panel); padding: 5px; border: 1px solid #333; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 70px; }
-        .meta-card h3 { margin: 0; font-size: 0.65rem; color: #888; text-transform: uppercase; }
-        .meta-card .valor { font-size: 1.2rem; font-weight: bold; }
-        .card-acumulado .valor { color: #fff; text-shadow: 0 0 5px #fff; }
-
-        /* --- TABELA --- */
         .ranking-container { flex-grow: 1; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        thead tr { position: sticky; top: 0; background: #000; border-bottom: 2px solid var(--text); z-index: 2; }
-        th { text-align: center; padding: 8px 4px; color: #888; text-transform: uppercase; border-right: 1px solid #222; font-size: 0.75rem; }
-        td { padding: 8px 4px; border-bottom: 1px solid #222; border-right: 1px solid #222; text-align: center; font-weight: bold; font-size: 1.1rem; }
-        .td-nome { text-align: left; padding-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-        .progress-bg { width: 100%; background: #333; height: 4px; margin-bottom: 2px; border-radius: 2px; }
-        .progress-fill { height: 100%; transition: width 1s; border-radius: 2px; }
-
-        /* --- RESPONSIVIDADE --- */
+        thead tr { position: sticky; top: 0; background: #000; border-bottom: 2px solid #00ff00; z-index: 2; }
+        th { text-align: center; padding: 5px; color: #888; border-right: 1px solid #222; font-size: 0.8rem; }
+        td { padding: 5px; border-bottom: 1px solid #222; border-right: 1px solid #222; text-align: center; font-weight: bold; }
+        .td-nome { text-align: left; padding-left: 5px; }
+        
+        /* RESPONSIVO */
         @media (max-width: 768px) {
-            body { padding: 5px; overflow: auto; }
             .metas-header { grid-template-columns: 1fr 1fr; }
-            .meta-card:last-child { grid-column: span 2; border-color: #00ff00; }
-            .nome-loja-vitoria { font-size: 2rem; padding: 15px; }
-            .titulo-vitoria { font-size: 1.5rem; }
-            .col-hide-mobile { display: none; }
-            th, td { font-size: 0.8rem; padding: 5px 2px; }
-            .td-nome { max-width: 90px; }
+            .meta-card:last-child { grid-column: span 2; border: 1px solid #00ff00; }
+            .mobile-hide { display: none; }
+            .nome-loja-vitoria { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-    <div id="overlay-start" onclick="iniciarSistema()"><button id="btn-start">CLIQUE PARA INICIAR</button></div>
+
+    <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
+        <button id="btn-start">CLIQUE PARA INICIAR</button>
+    </div>
     
     <div id="overlay-vitoria">
-        <h2 class="titulo-vitoria">META BATIDA!</h2>
+        <h1 style="color:white; margin:0">META BATIDA!</h1>
         <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
     </div>
 
@@ -90,24 +84,23 @@
     <audio id="som-vitoria" src="3.mp3"></audio>
 
     <div class="metas-header">
-        <div class="meta-card"><h3>Meta Geral</h3><span class="valor" id="meta-geral">...</span></div>
-        <div class="meta-card card-acumulado"><h3>Acumulado</h3><span class="valor" id="acumulado-mes">...</span><small id="falta-vender" style="color:#888; font-size:0.6rem"></small></div>
-        <div class="meta-card"><h3>Quinzenal</h3><span class="valor" id="meta-quinzena">...</span></div>
-        <div class="meta-card"><h3>Semanal</h3><span class="valor" id="meta-semana">...</span></div>
-        <div class="meta-card"><h3>META DIÁRIA HOJE</h3><span class="valor" id="meta-diaria">...</span><small style="color:#fff; font-size:0.7rem">HOJE: <span id="venda-hoje-total">...</span></small></div>
+        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor" id="meta-geral">...</span></div>
+        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-color:#00ff00"><h3>META HOJE</h3><span class="valor" id="meta-diaria">...</span><small style="color:#fff; font-size:0.7rem" id="venda-hoje-total">...</small></div>
     </div>
 
     <div class="ranking-container">
         <table id="tabela-ranking">
             <thead>
                 <tr>
-                    <th width="8%">#</th>
-                    <th width="25%" style="text-align:left; padding-left:8px">Loja</th>
-                    <th class="col-hide-mobile" width="12%" style="color:#ffd700">Meta Mês</th>
-                    <th width="15%" style="color:#fff">Acumulado</th>
-                    <th class="col-hide-mobile" width="12%">Meta Dia</th>
+                    <th width="10%">#</th>
+                    <th width="30%" class="td-nome">Loja</th>
+                    <th class="mobile-hide" width="15%" style="color:#ffd700">Meta</th>
+                    <th width="20%" style="color:#fff">Acumulado</th>
                     <th width="15%">Hoje</th>
-                    <th width="13%">%</th>
+                    <th width="10%">%</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -115,66 +108,186 @@
     </div>
 
 <script>
-    // --- COLE SUA URL AQUI ---
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    // ==========================================
+    // COLE SUA URL ABAIXO (DENTRO DAS ASPAS):
+    // ==========================================
+    var WEB_APP_URL = "SUA_URL_AQUI"; 
+    // ==========================================
 
-    const lojasConfig = [
+    var lojasConfig = [
         { nome: "Prime Umuarama", meta: 60000 }, { nome: "Prime Toledo", meta: 30000 },
         { nome: "Umuarama 1", meta: 60000 }, { nome: "Palotina", meta: 50000 },
         { nome: "Umuarama 2", meta: 40000 }, { nome: "Douradina", meta: 40000 },
         { nome: "Altônia", meta: 40000 }, { nome: "Marechal", meta: 20000 },
         { nome: "Perobal", meta: 20000 }
     ];
-    
-    let rankingAnterior = [], ultimoTotalMes = 0, sistemaIniciado = false;
-    let lojasBatida = new Set(), metaGeralBatida = false;
 
-    // --- FUNÇÃO BLINDADA: Garante que a tela some mesmo com erro ---
-    function iniciarSistema() {
-        // 1. Esconde a tela imediatamente (Prioridade Total)
-        document.getElementById('overlay-start').style.display = 'none';
+    var rankingAnterior = [];
+    var ultimoTotalMes = 0;
+    var sistemaIniciado = false;
+    var lojasBatida = []; // Array simples para compatibilidade
+
+    // Função separada para tentar iniciar áudio
+    function tentarIniciar() {
         sistemaIniciado = true;
-        
-        // 2. Tenta tocar som, mas ignora se falhar
-        try { 
+        try {
             var audio = document.getElementById('som-caixa');
-            audio.play().then(()=>{ audio.pause(); audio.currentTime=0; }).catch(e => console.log("Erro audio:", e));
-        } catch(e){ console.log("Sem áudio inicial"); }
-
-        // 3. Inicia o sistema
+            audio.play().then(function() { 
+                audio.pause(); 
+                audio.currentTime = 0; 
+            }).catch(function(e) { console.log("Audio bloqueado inicialmente"); });
+        } catch(e) {}
         atualizar();
     }
-    
-    function tocar(id) { 
-        if(sistemaIniciado) { 
-            var a = document.getElementById(id); 
-            if(a){ a.currentTime=0; a.play().catch(()=>{}); } 
-        } 
+
+    function tocar(id) {
+        if (!sistemaIniciado) return;
+        try {
+            var audio = document.getElementById(id);
+            if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); }
+        } catch(e) {}
     }
 
-    // --- FUNÇÃO DE EFEITOS SEGURA ---
-    function dispararEfeitos() {
-        // Só tenta rodar confetes se a biblioteca carregou
+    // Função de efeitos (Confetes) com proteção contra falha
+    function soltarConfetes() {
         if (typeof confetti === 'function') {
             try {
-                var duration = 5 * 1000;
+                var duration = 5000;
                 var end = Date.now() + duration;
-
-                confetti({ particleCount: 150, spread: 100, origin: { y: 0.3 }, colors: ['#ffd700', '#00ff00', '#ffffff'], zIndex: 10001 });
-
                 (function frame() {
-                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#ff0000', '#00ff00', '#ffd700'], zIndex: 10001 });
-                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#ff0000', '#00ff00', '#ffd700'], zIndex: 10001 });
+                    confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#00ff00'] });
+                    confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#00ff00'] });
                     if (Date.now() < end) requestAnimationFrame(frame);
                 }());
-            } catch(e) { console.log("Erro ao animar confetes"); }
-        } else {
-            console.log("Biblioteca de confetes não carregou. Ignorando.");
+            } catch(e) {}
         }
     }
 
     function animarVitoria(nome) {
-        var ov = document.getElementById('overlay-vitoria');
+        var overlay = document.getElementById('overlay-vitoria');
         document.getElementById('nome-loja-animacao').innerText = nome;
-        ov.
+        overlay.style.display = 'flex';
+        tocar('som-vitoria');
+        soltarConfetes();
+        setTimeout(function() { overlay.style.display = 'none'; }, 6000);
+    }
 
+    function fmt(v) { 
+        return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); 
+    }
+
+    function getDiasRest() {
+        var hoje = new Date();
+        var dia = hoje.getDate();
+        var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+        if (dia >= ult) return 1;
+        var uteis = Math.floor((ult - dia) * (24 / 28));
+        return uteis > 0 ? uteis : 1;
+    }
+
+    function atualizar() {
+        if (!sistemaIniciado) return;
+
+        fetch(WEB_APP_URL)
+        .then(function(res) { return res.json(); })
+        .then(function(dados) {
+            var vendasHoje = dados.vendasHoje;
+            var totalMes = parseFloat(dados.totalMes);
+            var acumuladoLojas = dados.acumuladoPorLoja || {};
+
+            // Atualiza Header
+            var metaGeral = lojasConfig.reduce(function(a, b) { return a + b.meta; }, 0);
+            document.getElementById('meta-geral').innerText = fmt(metaGeral);
+            document.getElementById('acumulado-mes').innerText = fmt(totalMes);
+
+            var saldo = metaGeral - totalMes; if (saldo < 0) saldo = 0;
+            var dias = getDiasRest();
+            var metaDiaGeral = saldo / dias;
+
+            document.getElementById('meta-diaria').innerText = fmt(metaDiaGeral);
+            document.getElementById('meta-quinzena').innerText = fmt(metaDiaGeral * 12);
+            document.getElementById('meta-semana').innerText = fmt(metaDiaGeral * 6);
+
+            // Calcula vendas de hoje
+            var porLojaHoje = {};
+            var totalHoje = 0;
+            lojasConfig.forEach(function(l) { porLojaHoje[l.nome] = 0; });
+            
+            vendasHoje.forEach(function(v) {
+                if (porLojaHoje[v[0]] !== undefined) porLojaHoje[v[0]] += parseFloat(v[1]);
+                totalHoje += parseFloat(v[1]);
+            });
+            document.getElementById('venda-hoje-total').innerText = fmt(totalHoje);
+
+            // Som de Caixa
+            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) tocar('som-caixa');
+            ultimoTotalMes = totalMes;
+
+            // Ranking
+            var ranking = lojasConfig.map(function(l) {
+                var ac = acumuladoLojas[l.nome] || 0;
+                var sld = l.meta - ac; if (sld < 0) sld = 0;
+                var md = sld / dias;
+                var vh = porLojaHoje[l.nome];
+                var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
+                
+                return {
+                    nome: l.nome, metaMensal: l.meta, acumulado: ac,
+                    metaDia: md, vendido: vh, pct: pct, batida: sld <= 0
+                };
+            }).sort(function(a, b) { return b.vendido - a.vendido; });
+
+            // Verifica Vitórias
+            ranking.forEach(function(l) {
+                var bateuHoje = (l.vendido >= l.metaDia && l.metaDia > 0);
+                var bateuMes = (l.batida && l.vendido > 0);
+                
+                if (bateuHoje || bateuMes) {
+                    // Verifica se já tocou para esta loja
+                    if (lojasBatida.indexOf(l.nome) === -1) {
+                        animarVitoria(l.nome);
+                        lojasBatida.push(l.nome);
+                    }
+                }
+            });
+
+            // Som de Ultrapassagem
+            if (rankingAnterior.length > 0) {
+                var mudou = false;
+                for (var i = 0; i < ranking.length; i++) {
+                    if (ranking[i].nome !== rankingAnterior[i]) mudou = true;
+                }
+                if (mudou) tocar('som-corrida');
+            }
+            rankingAnterior = ranking.map(function(r) { return r.nome; });
+
+            // Renderiza Tabela
+            var tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            ranking.forEach(function(r, i) {
+                var tr = document.createElement('tr');
+                var corVenda = r.batida ? 'color:#ffd700' : (r.vendido < (r.metaDia * 0.5) ? 'color:red' : '#00ff00');
+                var barraCor = r.vendido < (r.metaDia * 0.5) ? 'red' : '#00ff00';
+                var pctShow = Math.min(r.pct, 100);
+
+                tr.innerHTML = 
+                    '<td>' + (i + 1) + 'º</td>' +
+                    '<td class="td-nome">' + r.nome + '</td>' +
+                    '<td class="mobile-hide" style="color:#ffd700">' + fmt(r.metaMensal) + '</td>' +
+                    '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
+                    '<td style="' + corVenda + '">' + fmt(r.vendido) + '</td>' +
+                    '<td><div style="background:#333;height:4px;width:100%"><div style="height:100%;width:' + pctShow + '%;background:' + barraCor + '"></div></div>' + r.pct.toFixed(0) + '%</td>';
+                
+                tbody.appendChild(tr);
+            });
+
+        }).catch(function(e) { console.log(e); });
+    }
+
+    // Loop de atualização
+    setInterval(atualizar, 5000);
+
+</script>
+</body>
+</html>
