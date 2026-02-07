@@ -3,48 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RANKING APP</title>
+    <title>STOCK MARKET RANKING</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M50 450 L150 250 L250 350 L450 50' stroke='%2339ff14' stroke-width='40' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M50 450 L150 250 L250 350 L450 50' stroke='%2339ff14' stroke-width='40' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%2300ff00' stroke-width='30' fill='none'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%2300ff00' stroke-width='30' fill='none'/%3E%3C/svg%3E">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --bg: #000000;
-            --green: #39ff14;
-            --blue: #00ffff;
-            --red: #ff073a;
-            --gold: #ffd700;
-            --panel: #0a0a0a;
+            --stock-green: #00ff00; /* Verde Ticker Puro */
+            --stock-red: #ff3333;   /* Vermelho Ticker Puro */
+            --stock-blue: #00ccff;
+            --stock-gold: #ffcc00;
+            --text-gray: #666666;
+            --border-color: #222222;
         }
 
         body { 
             background: var(--bg); 
-            color: var(--green); 
+            color: #ffffff; 
             font-family: 'Montserrat', sans-serif; 
-            font-weight: 900; 
-            margin: 0; padding: 15px; 
+            font-weight: 700; 
+            margin: 0; padding: 10px; 
             height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
             -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
         }
 
-        /* CORES SÓLIDAS (SEM NEON/GLOW) */
-        .text-green { color: var(--green); }
-        .text-blue { color: var(--blue); }
-        .text-red { color: var(--red); }
-        .text-gold { color: var(--gold); }
-        .text-white { color: #fff; }
+        /* UTILITÁRIOS DE COR (SEM NEON) */
+        .up { color: var(--stock-green); }
+        .down { color: var(--stock-red); }
+        .neutral { color: var(--stock-blue); }
+        .gold { color: var(--stock-gold); }
+        .muted { color: var(--text-gray); }
 
         /* TELA START */
         #overlay-start { 
@@ -54,89 +55,98 @@
             cursor: pointer; 
         }
         #btn-start { 
-            padding: 30px 60px; font-size: 3rem; 
-            background: transparent; color: var(--green);
-            border: 4px solid var(--green); 
+            padding: 25px 50px; font-size: 2rem; 
+            background: #000; color: var(--stock-green);
+            border: 2px solid var(--stock-green); 
             font-family: 'Montserrat', sans-serif; font-weight: 900;
-            border-radius: 50px; 
-            cursor: pointer; animation: pulse 1.5s infinite;
+            text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; transition: 0.2s;
         }
-        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.05);} 100% {transform: scale(1);} }
+        #btn-start:hover { background: var(--stock-green); color: #000; }
 
-        /* TELA VITÓRIA */
+        /* TELA VITÓRIA - ESTILO "BREAKING NEWS" */
         #overlay-vitoria { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.95); z-index: 10000; 
             flex-direction: column; align-items: center; justify-content: center; text-align: center; 
         }
         .nome-loja-vitoria { 
-            font-size: 9rem; font-weight: 900; color: var(--gold); text-transform: uppercase; 
-            border: 10px solid var(--gold); padding: 40px; border-radius: 40px; 
-            background: #000;
-            margin-top: 30px; max-width: 95%; line-height: 0.9;
+            font-size: 8rem; font-weight: 900; color: var(--stock-gold); text-transform: uppercase; 
+            border-top: 5px solid var(--stock-gold); 
+            border-bottom: 5px solid var(--stock-gold);
+            padding: 20px 0; background: #000; width: 100%;
+            margin-top: 30px; line-height: 1; letter-spacing: -2px;
         }
 
-        /* HEADER */
+        /* HEADER - ESTILO TICKER */
         .metas-header { 
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; 
-            margin-bottom: 15px; padding-bottom: 15px; 
-            border-bottom: 4px solid var(--blue); flex-shrink: 0; 
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; 
+            margin-bottom: 10px; padding-bottom: 10px; 
+            border-bottom: 1px solid var(--border-color); flex-shrink: 0; 
         }
         .meta-card { 
-            background: #111; padding: 10px; border: 2px solid #333; 
-            text-align: center; display: flex; flex-direction: column; justify-content: center; 
-            min-height: 110px; border-radius: 15px;
+            background: #080808; padding: 10px; 
+            text-align: right; /* Alinhamento financeiro */
+            display: flex; flex-direction: column; justify-content: center; 
+            min-height: 80px; border-left: 2px solid var(--border-color);
         }
-        .meta-card h3 { margin: 0; font-size: 0.9rem; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
-        .meta-card .valor { font-size: 2.5rem; font-weight: 900; margin-top: 5px; }
+        .meta-card h3 { margin: 0; font-size: 0.75rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; text-align: left; }
+        .meta-card .valor { font-size: 1.8rem; font-weight: 900; margin-top: 5px; letter-spacing: -1px; }
         
-        /* TABELA */
+        /* TABELA - ESTILO DATA GRID */
         .ranking-container { flex-grow: 1; overflow-y: auto; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+        table { width: 100%; border-collapse: collapse; }
         
-        thead tr { position: sticky; top: 0; background: #000; z-index: 2; }
+        thead tr { position: sticky; top: 0; background: #000; z-index: 2; border-bottom: 2px solid var(--text-gray); }
         
         th { 
-            text-align: center; padding: 15px; color: var(--blue); 
-            border-bottom: 4px solid var(--blue);
-            font-size: 1.1rem; text-transform: uppercase;
+            text-align: right; /* Cabeçalhos à direita */
+            padding: 10px; color: var(--text-gray); 
+            font-size: 0.9rem; text-transform: uppercase; font-weight: 700;
         }
-        
+        /* Primeira coluna alinhada à esquerda */
+        th:first-child, td:first-child { text-align: left; }
+        /* Coluna Loja alinhada à esquerda */
+        th:nth-child(2), td:nth-child(2) { text-align: left; }
+
         td { 
-            padding: 15px 10px; background: #111;
-            border-bottom: 1px solid #222; 
-            text-align: center; font-size: 1.8rem; 
+            padding: 12px 10px; background: #000;
+            border-bottom: 1px solid var(--border-color); 
+            text-align: right; font-size: 1.4rem; letter-spacing: -0.5px;
         }
         
-        .td-nome { text-align: left; padding-left: 20px; font-size: 1.8rem; color: #fff; }
+        .td-nome { font-weight: 900; font-size: 1.5rem; color: #fff; letter-spacing: 0px; }
         
-        .progress-bg { background: #222; height: 12px; width: 100%; border-radius: 6px; }
-        .progress-fill { height: 100%; border-radius: 6px; transition: width 1s ease-out; }
+        /* BARRAS RETAS (ESTILO GRÁFICO) */
+        .progress-bg { background: #1a1a1a; height: 10px; width: 100%; margin-top: 5px; }
+        .progress-fill { height: 100%; transition: width 1s ease-out; }
 
         /* RESPONSIVO */
         @media (max-width: 768px) {
             body { padding: 5px; }
             #btn-start { font-size: 1.5rem; padding: 20px; }
-            .metas-header { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .meta-card { min-height: 80px; }
-            .meta-card .valor { font-size: 1.5rem; }
-            .meta-card:last-child { grid-column: span 2; border-color: var(--green); }
-            th { font-size: 0.8rem; padding: 5px; }
-            td { font-size: 1.1rem; padding: 10px 5px; }
-            .td-nome { font-size: 1.1rem; padding-left: 10px; }
+            .metas-header { grid-template-columns: 1fr 1fr; gap: 5px; }
+            .meta-card { min-height: 70px; border: 1px solid #222; }
+            .meta-card .valor { font-size: 1.4rem; }
+            .meta-card:last-child { grid-column: span 2; border-bottom: 2px solid var(--stock-green); }
+            
+            th { font-size: 0.7rem; padding: 5px; }
+            td { font-size: 1rem; padding: 8px 5px; }
+            .td-nome { font-size: 1rem; }
+            
             .mobile-hide { display: none; }
-            .nome-loja-vitoria { font-size: 3rem; border-width: 4px; padding: 20px; }
+            .nome-loja-vitoria { font-size: 3rem; border: none; background: transparent; color: #fff; }
         }
     </style>
 </head>
 <body>
 
     <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">INICIAR SISTEMA</button>
+        <button id="btn-start">ABRIR MERCADO</button>
     </div>
     
     <div id="overlay-vitoria">
-        <h1 class="text-white" style="font-size: 3rem; margin:0; letter-spacing: 5px;">META BATIDA!</h1>
+        <h1 style="color:#fff; font-size: 2rem; margin:0; letter-spacing: 5px; text-transform:uppercase">Meta Batida</h1>
         <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
     </div>
 
@@ -145,23 +155,23 @@
     <audio id="som-vitoria" src="3.mp3"></audio>
 
     <div class="metas-header">
-        <div class="meta-card"><h3>Geral (Mês)</h3><span class="valor text-green" id="meta-geral">...</span></div>
-        <div class="meta-card" style="border-color:#fff"><h3>Acumulado</h3><span class="valor text-white" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Quinzenal</h3><span class="valor text-blue" id="meta-quinzena">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Semanal</h3><span class="valor text-blue" id="meta-semana">...</span></div>
-        <div class="meta-card" style="border-color:var(--green)"><h3>META HOJE</h3><span class="valor text-green" id="meta-diaria">...</span><small style="color:#fff; font-size:0.9rem; margin-top:5px" id="venda-hoje-total">...</small></div>
+        <div class="meta-card"><h3>Meta Mês (Global)</h3><span class="valor up" id="meta-geral">...</span></div>
+        <div class="meta-card"><h3>Realizado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Proj. Quinzena</h3><span class="valor neutral" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Proj. Semana</h3><span class="valor neutral" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-left: 4px solid var(--stock-green)"><h3>Alvo Hoje (Global)</h3><span class="valor up" id="meta-diaria">...</span><small class="muted" style="margin-top:2px; font-size:0.7rem">VENDIDO HOJE: <span id="venda-hoje-total" style="color:#fff">...</span></small></div>
     </div>
 
     <div class="ranking-container">
         <table id="tabela-ranking">
             <thead>
                 <tr>
-                    <th width="8%">#</th>
-                    <th width="28%" style="text-align:left; padding-left:20px">Loja</th>
-                    <th class="mobile-hide" width="15%" style="color:var(--gold)">Meta</th>
-                    <th width="18%" style="color:#fff">Acumulado</th>
-                    <th width="18%">Hoje</th>
-                    <th width="13%">%</th>
+                    <th width="5%">#</th>
+                    <th width="25%">ATIVO (LOJA)</th>
+                    <th class="mobile-hide" width="12%">MENSAL</th>
+                    <th width="15%">ACUMULADO</th>
+                    <th width="15%" style="color:#fff">META DIA</th> <th width="15%">HOJE</th>
+                    <th width="13%">VAR(%)</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -172,7 +182,7 @@
     // ==========================================
     // COLE SUA URL AQUI:
     // ==========================================
-    var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    var WEB_APP_URL = "SUA_URL_AQUI"; 
     // ==========================================
 
     var lojasConfig = [
@@ -204,12 +214,12 @@
 
     function soltarConfetes() {
         if (typeof confetti === 'function') {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#00ffff', '#ff0000'], zIndex: 10001 });
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#ffffff', '#00ff00'], zIndex: 10001 });
             var duration = 15000;
             var end = Date.now() + duration;
             (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#00ffff', '#39ff14'], zIndex: 10001 });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#00ffff', '#39ff14'], zIndex: 10001 });
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#ffffff'], zIndex: 10001 });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#ffffff'], zIndex: 10001 });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
@@ -224,7 +234,9 @@
         setTimeout(function() { overlay.style.display = 'none'; }, 15000);
     }
 
-    function fmt(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
+    // Formatação financeira padrão (sem centavos para limpar)
+    function fmt(v) { return v.toLocaleString('pt-BR', {style:'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
 
     function getDiasRest() {
         var hoje = new Date(); var dia = hoje.getDate(); var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
@@ -243,16 +255,16 @@
             var acumuladoLojas = dados.acumuladoPorLoja || {};
 
             var metaGeral = lojasConfig.reduce(function(a, b) { return a + b.meta; }, 0);
-            document.getElementById('meta-geral').innerText = fmt(metaGeral);
-            document.getElementById('acumulado-mes').innerText = fmt(totalMes);
+            document.getElementById('meta-geral').innerText = fmtM(metaGeral);
+            document.getElementById('acumulado-mes').innerText = fmtM(totalMes);
 
             var saldo = metaGeral - totalMes; if (saldo < 0) saldo = 0;
             var dias = getDiasRest();
             var metaDiaGeral = saldo / dias;
 
-            document.getElementById('meta-diaria').innerText = fmt(metaDiaGeral);
-            document.getElementById('meta-quinzena').innerText = fmt(metaDiaGeral * 12);
-            document.getElementById('meta-semana').innerText = fmt(metaDiaGeral * 6);
+            document.getElementById('meta-diaria').innerText = fmtM(metaDiaGeral);
+            document.getElementById('meta-quinzena').innerText = fmtM(metaDiaGeral * 12);
+            document.getElementById('meta-semana').innerText = fmtM(metaDiaGeral * 6);
 
             var porLojaHoje = {}; var totalHoje = 0;
             lojasConfig.forEach(function(l) { porLojaHoje[l.nome] = 0; });
@@ -260,7 +272,7 @@
                 if (porLojaHoje[v[0]] !== undefined) porLojaHoje[v[0]] += parseFloat(v[1]);
                 totalHoje += parseFloat(v[1]);
             });
-            document.getElementById('venda-hoje-total').innerText = fmt(totalHoje);
+            document.getElementById('venda-hoje-total').innerText = fmtM(totalHoje);
 
             if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) tocar('som-caixa');
             ultimoTotalMes = totalMes;
@@ -268,7 +280,10 @@
             var ranking = lojasConfig.map(function(l) {
                 var ac = acumuladoLojas[l.nome] || 0;
                 var sld = l.meta - ac; if (sld < 0) sld = 0;
-                var md = sld / dias;
+                
+                // CÁLCULO DA META DIÁRIA INDIVIDUAL DA LOJA
+                var md = sld / dias; 
+                
                 var vh = porLojaHoje[l.nome];
                 var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
                 
@@ -299,25 +314,30 @@
             ranking.forEach(function(r, i) {
                 var tr = document.createElement('tr');
                 
-                var corTexto = '#39ff14'; // Verde
-                var corBarra = '#39ff14';
+                // Cores de Ação (Bolsa de Valores)
+                var corTexto = '#00ff00'; // Verde Ticker
+                var corBarra = '#00ff00';
                 
                 if (r.batida) {
-                    corTexto = '#ffd700'; // Ouro
-                    corBarra = '#ffd700';
+                    corTexto = '#ffcc00'; // Ouro
+                    corBarra = '#ffcc00';
                 } else if (r.vendido < (r.metaDia * 0.5)) {
-                    corTexto = '#ff073a'; // Vermelho
-                    corBarra = '#ff073a';
+                    corTexto = '#ff3333'; // Vermelho Ticker
+                    corBarra = '#ff3333';
                 }
 
                 tr.innerHTML = 
-                    '<td class="text-white">' + (i + 1) + 'º</td>' +
+                    '<td class="muted">' + (i + 1) + '</td>' +
                     '<td class="td-nome">' + r.nome + '</td>' +
-                    '<td class="mobile-hide" style="color:#ffd700">' + fmt(r.metaMensal) + '</td>' +
+                    '<td class="mobile-hide muted">' + fmt(r.metaMensal) + '</td>' +
                     '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
+                    
+                    // NOVA COLUNA: META DIÁRIA INDIVIDUAL
+                    '<td style="color:#fff; font-weight:bold">' + fmt(r.metaDia) + '</td>' +
+                    
                     '<td style="color:' + corTexto + '">' + fmt(r.vendido) + '</td>' +
                     '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '"></div></div>' + 
-                    '<span style="color:' + corTexto + '">' + r.pct.toFixed(0) + '%</span></td>';
+                    '<span style="color:' + corTexto + '; font-size:0.9rem">' + r.pct.toFixed(1) + '%</span></td>';
                 
                 tbody.appendChild(tr);
             });
@@ -330,6 +350,3 @@
 </script>
 </body>
 </html>
-
-
-
