@@ -240,11 +240,25 @@
     function fmt(v) { return v.toLocaleString('pt-BR', {style:'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
 
+    // --- FUNÇÃO MODIFICADA ABAIXO ---
     function getDiasRest() {
-        var hoje = new Date(); var dia = hoje.getDate(); var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+        var hoje = new Date(); 
+        var dia = hoje.getDate(); 
+        var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
+        
+        // Se já passou do último dia (erro lógico raro), retorna 1
         if (dia >= ult) return 1;
-        var uteis = Math.floor((ult - dia) * (24 / 28)); return uteis > 0 ? uteis : 1;
+        
+        // Cálculo heurístico de dias úteis
+        var uteis = Math.floor((ult - dia) * (24 / 28)); 
+        
+        // Se o cálculo der zero ou menos, assume 1, senão usa o valor calculado
+        var diasBase = uteis > 0 ? uteis : 1;
+        
+        // ADICIONANDO 2 DIAS A MAIS AO CÁLCULO
+        return diasBase + 2;
     }
+    // --------------------------------
 
     function atualizar() {
         if (!sistemaIniciado) return;
@@ -261,7 +275,9 @@
             document.getElementById('acumulado-mes').innerText = fmtM(totalMes);
 
             var saldo = metaGeral - totalMes; if (saldo < 0) saldo = 0;
-            var dias = getDiasRest();
+            
+            // Aqui ele puxa o valor da função modificada (+2 dias)
+            var dias = getDiasRest(); 
             var metaDiaGeral = saldo / dias;
 
             document.getElementById('meta-diaria').innerText = fmtM(metaDiaGeral);
@@ -277,7 +293,6 @@
             document.getElementById('venda-hoje-total').innerText = fmtM(totalHoje);
 
             // --- LÓGICA DO SOM DE CAIXA (Som 1) ---
-            // Toca apenas se o total do mês aumentou (alguém vendeu)
             if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) {
                 tocar('som-caixa');
             }
@@ -287,6 +302,8 @@
             var ranking = lojasConfig.map(function(l) {
                 var ac = acumuladoLojas[l.nome] || 0;
                 var sld = l.meta - ac; if (sld < 0) sld = 0;
+                
+                // Meta Dia da Loja também usa os dias + 2
                 var md = sld / dias; 
                 var vh = porLojaHoje[l.nome];
                 var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
@@ -294,11 +311,10 @@
                 return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sld <= 0 };
             });
 
-            // --- ORDENAÇÃO ESTÁVEL (CORREÇÃO DO SOM DE CARRO) ---
-            // Se as vendas forem iguais, ordena pelo nome. Isso impede que o ranking mude "do nada" e toque o som errado.
+            // --- ORDENAÇÃO ESTÁVEL ---
             ranking.sort(function(a, b) {
                 if (b.vendido === a.vendido) {
-                    return a.nome.localeCompare(b.nome); // Desempate alfabético
+                    return a.nome.localeCompare(b.nome);
                 }
                 return b.vendido - a.vendido;
             });
@@ -307,19 +323,16 @@
             if (rankingAnterior.length > 0) {
                 var mudou = false;
                 for (var i = 0; i < ranking.length; i++) {
-                    // Verifica se a loja na posição i é diferente da anterior
                     if (ranking[i].nome !== rankingAnterior[i]) {
                         mudou = true;
                         break;
                     }
                 }
-                // Só toca se houve mudança real na ordem
                 if (mudou) {
                     tocar('som-corrida');
                 }
             }
             
-            // Salva o ranking atual para comparar na próxima volta
             rankingAnterior = ranking.map(function(r) { return r.nome; });
 
             // --- VERIFICAÇÃO DE VITÓRIAS ---
@@ -341,15 +354,14 @@
             ranking.forEach(function(r, i) {
                 var tr = document.createElement('tr');
                 
-                // Cores de Ação
-                var corTexto = '#00ff00'; // Verde Ticker
+                var corTexto = '#00ff00';
                 var corBarra = '#00ff00';
                 
                 if (r.batida) {
-                    corTexto = '#ffcc00'; // Ouro
+                    corTexto = '#ffcc00';
                     corBarra = '#ffcc00';
                 } else if (r.vendido < (r.metaDia * 0.5)) {
-                    corTexto = '#ff3333'; // Vermelho Ticker
+                    corTexto = '#ff3333';
                     corBarra = '#ff3333';
                 }
 
@@ -374,5 +386,3 @@
 </script>
 </body>
 </html>
-
-
