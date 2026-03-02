@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RANKING APPs</title>
+    <title>RANKING APPs - EDIÇÃO MULHERES</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%2300ff00' stroke-width='30' fill='none'/%3E%3C/svg%3E" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%2300ff00' stroke-width='30' fill='none'/%3E%3C/svg%3E">
-
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%23ff007f' stroke-width='30' fill='none'/%3E%3C/svg%3E" type="image/svg+xml">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
@@ -21,15 +20,14 @@
     <style>
         :root {
             --bg: #000000;
-            --stock-green: #00ff00; 
+            --stock-green: #ff007f; /* ROSA VIBRANTE */
             --stock-red: #ff3333;   
-            --stock-blue: #00ccff;
+            --stock-blue: #ff66cc;  /* ROSA CLARO */
             --stock-gold: #ffcc00;
-            --text-gray: #666666;
-            --border-color: #222222;
+            --text-gray: #888888;
+            --border-color: #331122;
         }
 
-        /* APLICAÇÃO GERAL DA FONTE MONTSERRAT */
         body, button, input, select, table, th, td, h1, h2, h3, span, div {
             font-family: 'Montserrat', sans-serif !important; 
         }
@@ -44,14 +42,25 @@
             -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
         }
 
-        /* UTILITÁRIOS DE COR (SEM NEON) */
+        /* UTILITÁRIOS */
         .up { color: var(--stock-green); }
         .down { color: var(--stock-red); }
         .neutral { color: var(--stock-blue); }
-        .gold { color: var(--stock-gold); }
         .muted { color: var(--text-gray); }
 
-        /* TELA START */
+        /* FRASE DE EMPODERAMENTO */
+        .frase-mulheres {
+            background: linear-gradient(90deg, #000, #ff007f, #000);
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--stock-green);
+        }
+
         #overlay-start { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #000; z-index: 9999; 
@@ -68,28 +77,26 @@
         }
         #btn-start:hover { background: var(--stock-green); color: #000; }
 
-        /* TELA VITÓRIA - ESTILO "BREAKING NEWS" */
         #overlay-vitoria { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.95); z-index: 10000; 
             flex-direction: column; align-items: center; justify-content: center; text-align: center; 
         }
         .nome-loja-vitoria { 
-            font-size: 8rem; font-weight: 900; color: var(--stock-gold); text-transform: uppercase; 
-            border-top: 5px solid var(--stock-gold); 
-            border-bottom: 5px solid var(--stock-gold);
+            font-size: 8rem; font-weight: 900; color: var(--stock-green); text-transform: uppercase; 
+            border-top: 5px solid var(--stock-green); 
+            border-bottom: 5px solid var(--stock-green);
             padding: 20px 0; background: #000; width: 100%;
             margin-top: 30px; line-height: 1; letter-spacing: -2px;
         }
 
-        /* HEADER - ESTILO TICKER */
         .metas-header { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; 
             margin-bottom: 10px; padding-bottom: 10px; 
             border-bottom: 1px solid var(--border-color); flex-shrink: 0; 
         }
         .meta-card { 
-            background: #080808; padding: 10px; 
+            background: #0d0006; padding: 10px; 
             text-align: right; 
             display: flex; flex-direction: column; justify-content: center; 
             min-height: 80px; border-left: 2px solid var(--border-color);
@@ -97,54 +104,35 @@
         .meta-card h3 { margin: 0; font-size: 0.75rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; text-align: left; }
         .meta-card .valor { font-size: 1.8rem; font-weight: 900; margin-top: 5px; letter-spacing: -1px; }
         
-        /* TABELA - ESTILO DATA GRID */
         .ranking-container { flex-grow: 1; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; }
-        
-        thead tr { position: sticky; top: 0; background: #000; z-index: 2; border-bottom: 2px solid var(--text-gray); }
-        
-        th { 
-            text-align: right; 
-            padding: 10px; color: var(--text-gray); 
-            font-size: 0.9rem; text-transform: uppercase; font-weight: 700;
-        }
+        thead tr { position: sticky; top: 0; background: #000; z-index: 2; border-bottom: 2px solid var(--stock-green); }
+        th { text-align: right; padding: 10px; color: var(--text-gray); font-size: 0.85rem; text-transform: uppercase; }
         th:first-child, td:first-child { text-align: left; }
         th:nth-child(2), td:nth-child(2) { text-align: left; }
-
-        td { 
-            padding: 12px 10px; background: #000;
-            border-bottom: 1px solid var(--border-color); 
-            text-align: right; font-size: 1.4rem; letter-spacing: -0.5px;
-        }
+        td { padding: 12px 10px; background: #000; border-bottom: 1px solid var(--border-color); text-align: right; font-size: 1.4rem; }
+        .td-nome { font-weight: 900; font-size: 1.5rem; color: #fff; }
         
-        .td-nome { font-weight: 900; font-size: 1.5rem; color: #fff; letter-spacing: 0px; }
-        
-        /* BARRAS RETAS (ESTILO GRÁFICO) */
-        .progress-bg { background: #1a1a1a; height: 10px; width: 100%; margin-top: 5px; }
+        .progress-bg { background: #220011; height: 10px; width: 100%; margin-top: 5px; }
         .progress-fill { height: 100%; transition: width 1s ease-out; }
 
-        /* RESPONSIVO */
         @media (max-width: 768px) {
-            body { padding: 5px; }
-            #btn-start { font-size: 1.5rem; padding: 20px; }
-            .metas-header { grid-template-columns: 1fr 1fr; gap: 5px; }
-            .meta-card { min-height: 70px; border: 1px solid #222; }
-            .meta-card .valor { font-size: 1.4rem; }
+            .metas-header { grid-template-columns: 1fr 1fr; }
             .meta-card:last-child { grid-column: span 2; border-bottom: 2px solid var(--stock-green); }
-            
-            th { font-size: 0.7rem; padding: 5px; }
-            td { font-size: 1rem; padding: 8px 5px; }
-            .td-nome { font-size: 1rem; }
-            
             .mobile-hide { display: none; }
-            .nome-loja-vitoria { font-size: 3rem; border: none; background: transparent; color: #fff; }
+            .nome-loja-vitoria { font-size: 3rem; }
+            td, .td-nome { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="frase-mulheres">
+        🌸 "Mulheres que inspiram, vendem e conquistam o mundo. Vocês são a força do nosso sucesso!" 🌸
+    </div>
+
     <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">ABRIR GRAFICO</button>
+        <button id="btn-start">ABRIR GRAFICO ROSA</button>
     </div>
     
     <div id="overlay-vitoria">
@@ -159,8 +147,8 @@
     <div class="metas-header">
         <div class="meta-card"><h3>Meta Mês (Global)</h3><span class="valor up" id="meta-geral">...</span></div>
         <div class="meta-card"><h3>Realizado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Proj. Quinzena</h3><span class="valor neutral" id="meta-quinzena">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Proj. Semana</h3><span class="valor neutral" id="meta-semana">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Faltante p/ Quinzena</h3><span class="valor neutral" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Faltante p/ Semana</h3><span class="valor neutral" id="meta-semana">...</span></div>
         <div class="meta-card" style="border-left: 4px solid var(--stock-green)"><h3>Alvo Hoje (Global)</h3><span class="valor up" id="meta-diaria">...</span><small class="muted" style="margin-top:2px; font-size:0.7rem">VENDIDO HOJE: <span id="venda-hoje-total" style="color:#fff">...</span></small></div>
     </div>
 
@@ -182,11 +170,7 @@
     </div>
 
 <script>
-    // ==========================================
-    // COLE SUA URL AQUI:
-    // ==========================================
     var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
-    // ==========================================
 
     var lojasConfig = [
         { nome: "Prime Umuarama", meta: 60000 }, { nome: "Prime Toledo", meta: 30000 },
@@ -217,14 +201,7 @@
 
     function soltarConfetes() {
         if (typeof confetti === 'function') {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffd700', '#ffffff', '#00ff00'], zIndex: 10001 });
-            var duration = 15000;
-            var end = Date.now() + duration;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ffd700', '#ffffff'], zIndex: 10001 });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ffd700', '#ffffff'], zIndex: 10001 });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ff007f', '#ffffff', '#ff66cc'], zIndex: 10001 });
         }
     }
 
@@ -240,25 +217,15 @@
     function fmt(v) { return v.toLocaleString('pt-BR', {style:'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
 
-    // --- FUNÇÃO MODIFICADA ABAIXO ---
     function getDiasRest() {
-        var hoje = new Date(); 
-        var dia = hoje.getDate(); 
-        var ult = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).getDate();
-        
-        // Se já passou do último dia (erro lógico raro), retorna 1
-        if (dia >= ult) return 1;
-        
-        // Cálculo heurístico de dias úteis
-        var uteis = Math.floor((ult - dia) * (24 / 28)); 
-        
-        // Se o cálculo der zero ou menos, assume 1, senão usa o valor calculado
-        var diasBase = uteis > 0 ? uteis : 1;
-        
-        // ADICIONANDO 2 DIAS A MAIS AO CÁLCULO
-        return diasBase + 2;
+        var hoje = new Date();
+        var mesAtual = hoje.getMonth();
+        var anoAtual = hoje.getFullYear();
+        var ultimoDiaMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+        var diaAtual = hoje.getDate();
+        var diasRestantes = (ultimoDiaMes - diaAtual) + 1;
+        return diasRestantes > 0 ? diasRestantes : 1;
     }
-    // --------------------------------
 
     function atualizar() {
         if (!sistemaIniciado) return;
@@ -274,15 +241,16 @@
             document.getElementById('meta-geral').innerText = fmtM(metaGeral);
             document.getElementById('acumulado-mes').innerText = fmtM(totalMes);
 
-            var saldo = metaGeral - totalMes; if (saldo < 0) saldo = 0;
+            // LOGICA MARÇO: META GLOBAL - ACUMULADO
+            var saldoFaltante = metaGeral - totalMes; 
+            if (saldoFaltante < 0) saldoFaltante = 0;
             
-            // Aqui ele puxa o valor da função modificada (+2 dias)
             var dias = getDiasRest(); 
-            var metaDiaGeral = saldo / dias;
+            var metaDiaGeral = saldoFaltante / dias;
 
             document.getElementById('meta-diaria').innerText = fmtM(metaDiaGeral);
-            document.getElementById('meta-quinzena').innerText = fmtM(metaDiaGeral * 12);
-            document.getElementById('meta-semana').innerText = fmtM(metaDiaGeral * 6);
+            document.getElementById('meta-quinzena').innerText = fmtM(metaDiaGeral * 15);
+            document.getElementById('meta-semana').innerText = fmtM(metaDiaGeral * 7);
 
             var porLojaHoje = {}; var totalHoje = 0;
             lojasConfig.forEach(function(l) { porLojaHoje[l.nome] = 0; });
@@ -292,55 +260,34 @@
             });
             document.getElementById('venda-hoje-total').innerText = fmtM(totalHoje);
 
-            // --- LÓGICA DO SOM DE CAIXA (Som 1) ---
-            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) {
-                tocar('som-caixa');
-            }
+            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) { tocar('som-caixa'); }
             ultimoTotalMes = totalMes;
 
-            // --- CÁLCULO DO RANKING ---
             var ranking = lojasConfig.map(function(l) {
                 var ac = acumuladoLojas[l.nome] || 0;
-                var sld = l.meta - ac; if (sld < 0) sld = 0;
-                
-                // Meta Dia da Loja também usa os dias + 2
-                var md = sld / dias; 
+                var sldLoja = l.meta - ac; if (sldLoja < 0) sldLoja = 0;
+                var md = sldLoja / dias; 
                 var vh = porLojaHoje[l.nome];
                 var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
-                
-                return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sld <= 0 };
+                return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sldLoja <= 0 };
             });
 
-            // --- ORDENAÇÃO ESTÁVEL ---
             ranking.sort(function(a, b) {
-                if (b.vendido === a.vendido) {
-                    return a.nome.localeCompare(b.nome);
-                }
+                if (b.vendido === a.vendido) return a.nome.localeCompare(b.nome);
                 return b.vendido - a.vendido;
             });
 
-            // --- LÓGICA DO SOM DE CORRIDA (Som 2) ---
             if (rankingAnterior.length > 0) {
                 var mudou = false;
                 for (var i = 0; i < ranking.length; i++) {
-                    if (ranking[i].nome !== rankingAnterior[i]) {
-                        mudou = true;
-                        break;
-                    }
+                    if (ranking[i].nome !== rankingAnterior[i]) { mudou = true; break; }
                 }
-                if (mudou) {
-                    tocar('som-corrida');
-                }
+                if (mudou) tocar('som-corrida');
             }
-            
             rankingAnterior = ranking.map(function(r) { return r.nome; });
 
-            // --- VERIFICAÇÃO DE VITÓRIAS ---
             ranking.forEach(function(l) {
-                var bateuHoje = (l.vendido >= l.metaDia && l.metaDia > 0);
-                var bateuMes = (l.batida && l.vendido > 0);
-                
-                if (bateuHoje || bateuMes) {
+                if ((l.vendido >= l.metaDia && l.metaDia > 0) || (l.batida && l.vendido > 0)) {
                     if (lojasBatida.indexOf(l.nome) === -1) {
                         animarVitoria(l.nome); 
                         lojasBatida.push(l.nome);
@@ -348,23 +295,10 @@
                 }
             });
 
-            // --- RENDERIZAÇÃO DA TABELA ---
             var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
-            
             ranking.forEach(function(r, i) {
                 var tr = document.createElement('tr');
-                
-                var corTexto = '#00ff00';
-                var corBarra = '#00ff00';
-                
-                if (r.batida) {
-                    corTexto = '#ffcc00';
-                    corBarra = '#ffcc00';
-                } else if (r.vendido < (r.metaDia * 0.5)) {
-                    corTexto = '#ff3333';
-                    corBarra = '#ff3333';
-                }
-
+                var corTexto = r.batida ? '#ffcc00' : (r.vendido < (r.metaDia * 0.5) ? '#ff3333' : '#ff007f');
                 tr.innerHTML = 
                     '<td class="muted">' + (i + 1) + '</td>' +
                     '<td class="td-nome">' + r.nome + '</td>' +
@@ -372,17 +306,13 @@
                     '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
                     '<td style="color:#fff; font-weight:bold">' + fmt(r.metaDia) + '</td>' +
                     '<td style="color:' + corTexto + '">' + fmt(r.vendido) + '</td>' +
-                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corBarra + '"></div></div>' + 
+                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corTexto + '"></div></div>' + 
                     '<span style="color:' + corTexto + '; font-size:0.9rem">' + r.pct.toFixed(1) + '%</span></td>';
-                
                 tbody.appendChild(tr);
             });
-
         }).catch(function(e) { console.log(e); });
     }
-
     setInterval(atualizar, 5000);
-
 </script>
 </body>
 </html>
