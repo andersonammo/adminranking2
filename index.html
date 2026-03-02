@@ -3,174 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RANKING APPs - EDIÇÃO MULHERES</title>
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
-
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23000000'/%3E%3Cpath d='M32 400 L160 250 L260 320 L480 80' stroke='%23ff007f' stroke-width='30' fill='none'/%3E%3C/svg%3E" type="image/svg+xml">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>RANKING ROSA - MARÇO</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <style>
-        :root {
-            --bg: #000000;
-            --stock-green: #ff007f; /* ROSA VIBRANTE */
-            --stock-red: #ff3333;   
-            --stock-blue: #ff66cc;  /* ROSA CLARO */
-            --stock-gold: #ffcc00;
-            --text-gray: #888888;
-            --border-color: #331122;
-        }
-
-        body, button, input, select, table, th, td, h1, h2, h3, span, div {
-            font-family: 'Montserrat', sans-serif !important; 
-        }
-
-        body { 
-            background: var(--bg); 
-            color: #ffffff; 
-            font-weight: 700; 
-            margin: 0; padding: 10px; 
-            height: 100vh; overflow: hidden;
-            display: flex; flex-direction: column;
-            -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;
-        }
-
-        /* UTILITÁRIOS */
-        .up { color: var(--stock-green); }
-        .down { color: var(--stock-red); }
-        .neutral { color: var(--stock-blue); }
-        .muted { color: var(--text-gray); }
-
-        /* FRASE DE EMPODERAMENTO */
-        .frase-mulheres {
-            background: linear-gradient(90deg, #000, #ff007f, #000);
-            color: #fff;
-            text-align: center;
-            padding: 8px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--stock-green);
-        }
-
-        #overlay-start { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 9999; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; 
-        }
-        #btn-start { 
-            padding: 25px 50px; font-size: 2rem; 
-            background: #000; color: var(--stock-green);
-            border: 2px solid var(--stock-green); 
-            font-weight: 900;
-            text-transform: uppercase; letter-spacing: 2px;
-            cursor: pointer; transition: 0.2s;
-        }
-        #btn-start:hover { background: var(--stock-green); color: #000; }
-
-        #overlay-vitoria { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); z-index: 10000; 
-            flex-direction: column; align-items: center; justify-content: center; text-align: center; 
-        }
-        .nome-loja-vitoria { 
-            font-size: 8rem; font-weight: 900; color: var(--stock-green); text-transform: uppercase; 
-            border-top: 5px solid var(--stock-green); 
-            border-bottom: 5px solid var(--stock-green);
-            padding: 20px 0; background: #000; width: 100%;
-            margin-top: 30px; line-height: 1; letter-spacing: -2px;
-        }
-
-        .metas-header { 
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; 
-            margin-bottom: 10px; padding-bottom: 10px; 
-            border-bottom: 1px solid var(--border-color); flex-shrink: 0; 
-        }
-        .meta-card { 
-            background: #0d0006; padding: 10px; 
-            text-align: right; 
-            display: flex; flex-direction: column; justify-content: center; 
-            min-height: 80px; border-left: 2px solid var(--border-color);
-        }
-        .meta-card h3 { margin: 0; font-size: 0.75rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; text-align: left; }
-        .meta-card .valor { font-size: 1.8rem; font-weight: 900; margin-top: 5px; letter-spacing: -1px; }
-        
+        :root { --bg: #000; --rosa: #ff007f; --gray: #888; --border: #331122; }
+        body { background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding: 10px; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        .frase { background: linear-gradient(90deg, #000, var(--rosa), #000); text-align: center; padding: 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--rosa); margin-bottom: 5px; }
+        .metas-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 10px; flex-shrink: 0; }
+        .meta-card { background: #0d0006; padding: 10px; text-align: right; border-left: 2px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
+        .meta-card h3 { margin: 0; font-size: 0.65rem; color: var(--gray); text-transform: uppercase; text-align: left; }
+        .meta-card .valor { font-size: 1.5rem; font-weight: 900; color: var(--rosa); }
         .ranking-container { flex-grow: 1; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; }
-        thead tr { position: sticky; top: 0; background: #000; z-index: 2; border-bottom: 2px solid var(--stock-green); }
-        th { text-align: right; padding: 10px; color: var(--text-gray); font-size: 0.85rem; text-transform: uppercase; }
-        th:first-child, td:first-child { text-align: left; }
-        th:nth-child(2), td:nth-child(2) { text-align: left; }
-        td { padding: 12px 10px; background: #000; border-bottom: 1px solid var(--border-color); text-align: right; font-size: 1.4rem; }
-        .td-nome { font-weight: 900; font-size: 1.5rem; color: #fff; }
-        
-        .progress-bg { background: #220011; height: 10px; width: 100%; margin-top: 5px; }
-        .progress-fill { height: 100%; transition: width 1s ease-out; }
-
-        @media (max-width: 768px) {
-            .metas-header { grid-template-columns: 1fr 1fr; }
-            .meta-card:last-child { grid-column: span 2; border-bottom: 2px solid var(--stock-green); }
-            .mobile-hide { display: none; }
-            .nome-loja-vitoria { font-size: 3rem; }
-            td, .td-nome { font-size: 1.1rem; }
-        }
+        thead th { position: sticky; top: 0; background: #000; text-align: right; padding: 10px; color: var(--gray); font-size: 0.8rem; border-bottom: 2px solid var(--rosa); z-index: 10; }
+        th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 1.2rem; background: #000; }
+        .td-nome { font-weight: 900; color: #fff; }
+        .progress-bg { background: #220011; height: 8px; width: 100%; margin-top: 5px; }
+        .progress-fill { height: 100%; transition: width 1s; }
+        #overlay-start { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:999; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        #btn-start { padding:20px 40px; border:2px solid var(--rosa); background:none; color:var(--rosa); font-size:1.8rem; font-weight:900; cursor:pointer; text-transform: uppercase; }
+        #overlay-vitoria { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; flex-direction:column; align-items:center; justify-content:center; text-align: center; }
+        @media (max-width: 768px) { .metas-header { grid-template-columns: 1fr 1fr; gap: 5px; } .meta-card:last-child { grid-column: span 2; } .mobile-hide { display: none; } td { font-size: 0.9rem; padding: 8px 5px; } }
     </style>
 </head>
 <body>
-
-    <div class="frase-mulheres">
-        🌸 "Mulheres que inspiram, vendem e conquistam o mundo. Vocês são a força do nosso sucesso!" 🌸
-    </div>
-
-    <div id="overlay-start" onclick="document.getElementById('overlay-start').style.display='none'; tentarIniciar();">
-        <button id="btn-start">ABRIR GRAFICO ROSA</button>
-    </div>
+    <div class="frase">🌸 "Mulheres que inspiram, vendem e conquistam o mundo. Vocês são a força do nosso sucesso!" 🌸</div>
+    <div id="overlay-start" onclick="this.style.display='none'; tentarIniciar();"><button id="btn-start">ABRIR RANKING ROSA</button></div>
+    <div id="overlay-vitoria"><h1 style="letter-spacing:5px; color:#fff">META BATIDA</h1><div id="nome-loja-animacao" style="font-size:5rem; color:var(--rosa); font-weight:900; margin-top:20px;"></div></div>
     
-    <div id="overlay-vitoria">
-        <h1 style="color:#fff; font-size: 2rem; margin:0; letter-spacing: 5px; text-transform:uppercase">Meta Batida</h1>
-        <div id="nome-loja-animacao" class="nome-loja-vitoria">LOJA</div>
-    </div>
-
     <audio id="som-caixa" src="1.mp3"></audio>
     <audio id="som-corrida" src="2.mp3"></audio>
     <audio id="som-vitoria" src="3.mp3"></audio>
 
     <div class="metas-header">
-        <div class="meta-card"><h3>Meta Mês (Global)</h3><span class="valor up" id="meta-geral">...</span></div>
+        <div class="meta-card"><h3>Meta Mês</h3><span class="valor" id="meta-geral">...</span></div>
         <div class="meta-card"><h3>Realizado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Faltante p/ Quinzena</h3><span class="valor neutral" id="meta-quinzena">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Faltante p/ Semana</h3><span class="valor neutral" id="meta-semana">...</span></div>
-        <div class="meta-card" style="border-left: 4px solid var(--stock-green)"><h3>Alvo Hoje (Global)</h3><span class="valor up" id="meta-diaria">...</span><small class="muted" style="margin-top:2px; font-size:0.7rem">VENDIDO HOJE: <span id="venda-hoje-total" style="color:#fff">...</span></small></div>
+        <div class="meta-card mobile-hide"><h3>Projeção 15 Dias</h3><span class="valor" style="color:#ff66cc" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Projeção 7 Dias</h3><span class="valor" style="color:#ff66cc" id="meta-semana">...</span></div>
+        <div class="meta-card" style="border-left:4px solid var(--rosa)"><h3>Alvo Hoje</h3><span class="valor" id="meta-diaria">...</span><br><small style="color:var(--gray); font-size:0.6rem">HOJE: <span id="venda-hoje-total" style="color:#fff">0</span></small></div>
     </div>
 
     <div class="ranking-container">
-        <table id="tabela-ranking">
+        <table>
             <thead>
-                <tr>
-                    <th width="5%">#</th>
-                    <th width="25%">ATIVO (LOJA)</th>
-                    <th class="mobile-hide" width="12%">MENSAL</th>
-                    <th width="15%">ACUMULADO</th>
-                    <th width="15%" style="color:#fff">META DIA</th>
-                    <th width="15%">HOJE</th>
-                    <th width="13%">VAR(%)</th>
-                </tr>
+                <tr><th width="5%">#</th><th width="25%">LOJA</th><th class="mobile-hide">MENSAL</th><th>ACUMULADO</th><th>META DIA</th><th>HOJE</th><th>%</th></tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="corpo-tabela"></tbody>
         </table>
     </div>
 
 <script>
+    // === COLE SUA URL DE IMPLANTAÇÃO AQUI ===
     var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfVzjpW8ezzfB9Jog128GIYasbvTWpPa_GYN7lGhrsTsNOLZY_QrhEscGxya3rlbNNhQ/exec"; 
+    // =======================================
 
     var lojasConfig = [
         { nome: "Prime Umuarama", meta: 60000 }, { nome: "Prime Toledo", meta: 30000 },
@@ -180,137 +67,91 @@
         { nome: "Perobal", meta: 20000 }
     ];
 
-    var rankingAnterior = [];
-    var ultimoTotalMes = 0;
-    var sistemaIniciado = false;
-    var lojasBatida = [];
+    var rankingAnterior = [], ultimoTotalMes = 0, sistemaIniciado = false, lojasBatida = [];
 
-    function tentarIniciar() {
-        sistemaIniciado = true;
-        try {
-            var audio = document.getElementById('som-caixa');
-            audio.play().then(function() { audio.pause(); audio.currentTime = 0; }).catch(function(e) {});
-        } catch(e) {}
-        atualizar();
-    }
-
-    function tocar(id) {
-        if (!sistemaIniciado) return;
-        try { var audio = document.getElementById(id); if (audio) { audio.currentTime = 0; audio.play().catch(function(){}); } } catch(e) {}
-    }
-
-    function soltarConfetes() {
-        if (typeof confetti === 'function') {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ff007f', '#ffffff', '#ff66cc'], zIndex: 10001 });
-        }
-    }
-
-    function animarVitoria(nome) {
-        var overlay = document.getElementById('overlay-vitoria');
-        document.getElementById('nome-loja-animacao').innerText = nome;
-        overlay.style.display = 'flex';
-        soltarConfetes(); 
-        tocar('som-vitoria'); 
-        setTimeout(function() { overlay.style.display = 'none'; }, 15000);
-    }
-
-    function fmt(v) { return v.toLocaleString('pt-BR', {style:'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    function tocar(id) { if(sistemaIniciado) { var a = document.getElementById(id); if(a){a.currentTime=0; a.play().catch(e=>{});} } }
+    function tentarIniciar() { sistemaIniciado = true; atualizar(); }
     function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
-
+    function fmt(v) { return v.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+    
     function getDiasRest() {
-        var hoje = new Date();
-        var mesAtual = hoje.getMonth();
-        var anoAtual = hoje.getFullYear();
-        var ultimoDiaMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
-        var diaAtual = hoje.getDate();
-        var diasRestantes = (ultimoDiaMes - diaAtual) + 1;
-        return diasRestantes > 0 ? diasRestantes : 1;
+        var h = new Date(), ult = new Date(h.getFullYear(), h.getMonth() + 1, 0).getDate();
+        var d = (ult - h.getDate()) + 1; return d > 0 ? d : 1;
     }
 
     function atualizar() {
-        if (!sistemaIniciado) return;
+        if(!sistemaIniciado) return;
+        fetch(WEB_APP_URL).then(res => res.json()).then(dados => {
+            if(dados.erro) { console.error(dados.erro); return; }
 
-        fetch(WEB_APP_URL)
-        .then(function(res) { return res.json(); })
-        .then(function(dados) {
-            var vendasHoje = dados.vendasHoje;
-            var totalMes = parseFloat(dados.totalMes);
+            var totalMes = parseFloat(dados.totalMes || 0);
             var acumuladoLojas = dados.acumuladoPorLoja || {};
+            var metaGeral = lojasConfig.reduce((a, b) => a + b.meta, 0);
+            var saldo = Math.max(0, metaGeral - totalMes);
+            var dias = getDiasRest();
+            var metaDiaGeral = saldo / dias;
 
-            var metaGeral = lojasConfig.reduce(function(a, b) { return a + b.meta; }, 0);
             document.getElementById('meta-geral').innerText = fmtM(metaGeral);
             document.getElementById('acumulado-mes').innerText = fmtM(totalMes);
-
-            // LOGICA MARÇO: META GLOBAL - ACUMULADO
-            var saldoFaltante = metaGeral - totalMes; 
-            if (saldoFaltante < 0) saldoFaltante = 0;
-            
-            var dias = getDiasRest(); 
-            var metaDiaGeral = saldoFaltante / dias;
-
             document.getElementById('meta-diaria').innerText = fmtM(metaDiaGeral);
             document.getElementById('meta-quinzena').innerText = fmtM(metaDiaGeral * 15);
             document.getElementById('meta-semana').innerText = fmtM(metaDiaGeral * 7);
 
             var porLojaHoje = {}; var totalHoje = 0;
-            lojasConfig.forEach(function(l) { porLojaHoje[l.nome] = 0; });
-            vendasHoje.forEach(function(v) {
-                if (porLojaHoje[v[0]] !== undefined) porLojaHoje[v[0]] += parseFloat(v[1]);
-                totalHoje += parseFloat(v[1]);
+            lojasConfig.forEach(l => porLojaHoje[l.nome] = 0);
+            (dados.vendasHoje || []).forEach(v => { 
+                if(porLojaHoje[v[0]] !== undefined) { porLojaHoje[v[0]] += v[1]; totalHoje += v[1]; }
             });
             document.getElementById('venda-hoje-total').innerText = fmtM(totalHoje);
 
-            if (ultimoTotalMes > 0 && totalMes > ultimoTotalMes) { tocar('som-caixa'); }
+            if(ultimoTotalMes > 0 && totalMes > ultimoTotalMes) tocar('som-caixa');
             ultimoTotalMes = totalMes;
 
-            var ranking = lojasConfig.map(function(l) {
+            var ranking = lojasConfig.map(l => {
                 var ac = acumuladoLojas[l.nome] || 0;
-                var sldLoja = l.meta - ac; if (sldLoja < 0) sldLoja = 0;
-                var md = sldLoja / dias; 
-                var vh = porLojaHoje[l.nome];
-                var pct = (md > 0) ? (vh / md) * 100 : (vh > 0 ? 100 : 0);
-                return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sldLoja <= 0 };
-            });
+                var sld = Math.max(0, l.meta - ac);
+                var md = sld / dias;
+                var vh = porLojaHoje[l.nome] || 0;
+                var pct = md > 0 ? (vh/md)*100 : (vh>0?100:0);
+                return { nome: l.nome, metaMensal: l.meta, acumulado: ac, metaDia: md, vendido: vh, pct: pct, batida: sld <= 0 };
+            }).sort((a,b) => b.vendido - a.vendido);
 
-            ranking.sort(function(a, b) {
-                if (b.vendido === a.vendido) return a.nome.localeCompare(b.nome);
-                return b.vendido - a.vendido;
-            });
-
-            if (rankingAnterior.length > 0) {
-                var mudou = false;
-                for (var i = 0; i < ranking.length; i++) {
-                    if (ranking[i].nome !== rankingAnterior[i]) { mudou = true; break; }
-                }
-                if (mudou) tocar('som-corrida');
+            // Som de ultrapassagem
+            var nomesRankingAtual = ranking.map(r => r.nome);
+            if(rankingAnterior.length > 0 && JSON.stringify(rankingAnterior) !== JSON.stringify(nomesRankingAtual)) {
+                tocar('som-corrida');
             }
-            rankingAnterior = ranking.map(function(r) { return r.nome; });
+            rankingAnterior = nomesRankingAtual;
 
-            ranking.forEach(function(l) {
-                if ((l.vendido >= l.metaDia && l.metaDia > 0) || (l.batida && l.vendido > 0)) {
-                    if (lojasBatida.indexOf(l.nome) === -1) {
-                        animarVitoria(l.nome); 
-                        lojasBatida.push(l.nome);
-                    }
+            var html = "";
+            ranking.forEach((r, i) => {
+                var cor = r.batida ? '#ffcc00' : (r.vendido < r.metaDia * 0.5 ? '#ff3333' : '#ff007f');
+                
+                // Animação de meta batida hoje
+                if(r.vendido >= r.metaDia && r.metaDia > 0 && !lojasBatida.includes(r.nome)) {
+                    document.getElementById('nome-loja-animacao').innerText = r.nome;
+                    document.getElementById('overlay-vitoria').style.display = 'flex';
+                    tocar('som-vitoria');
+                    confetti({particleCount: 150, spread: 70, origin: {y: 0.6}, colors: ['#ff007f', '#ffffff']});
+                    setTimeout(() => { document.getElementById('overlay-vitoria').style.display = 'none'; }, 10000);
+                    lojasBatida.push(r.nome);
                 }
-            });
 
-            var tbody = document.querySelector('tbody'); tbody.innerHTML = '';
-            ranking.forEach(function(r, i) {
-                var tr = document.createElement('tr');
-                var corTexto = r.batida ? '#ffcc00' : (r.vendido < (r.metaDia * 0.5) ? '#ff3333' : '#ff007f');
-                tr.innerHTML = 
-                    '<td class="muted">' + (i + 1) + '</td>' +
-                    '<td class="td-nome">' + r.nome + '</td>' +
-                    '<td class="mobile-hide muted">' + fmt(r.metaMensal) + '</td>' +
-                    '<td style="color:#fff">' + fmt(r.acumulado) + '</td>' +
-                    '<td style="color:#fff; font-weight:bold">' + fmt(r.metaDia) + '</td>' +
-                    '<td style="color:' + corTexto + '">' + fmt(r.vendido) + '</td>' +
-                    '<td><div class="progress-bg"><div class="progress-fill" style="width:' + Math.min(r.pct, 100) + '%; background:' + corTexto + '"></div></div>' + 
-                    '<span style="color:' + corTexto + '; font-size:0.9rem">' + r.pct.toFixed(1) + '%</span></td>';
-                tbody.appendChild(tr);
+                html += `<tr>
+                    <td style="color:#888">${i+1}</td>
+                    <td class="td-nome">${r.nome}</td>
+                    <td class="mobile-hide" style="color:#888">${fmt(r.metaMensal)}</td>
+                    <td style="color:#fff">${fmt(r.acumulado)}</td>
+                    <td style="font-weight:900; color:#fff">${fmt(r.metaDia)}</td>
+                    <td style="color:${cor}; font-weight:900">${fmt(r.vendido)}</td>
+                    <td>
+                        <div class="progress-bg"><div class="progress-fill" style="width:${Math.min(r.pct,100)}%; background:${cor}"></div></div>
+                        <small style="color:${cor}">${r.pct.toFixed(1)}%</small>
+                    </td>
+                </tr>`;
             });
-        }).catch(function(e) { console.log(e); });
+            document.getElementById('corpo-tabela').innerHTML = html;
+        }).catch(e => console.error("Erro na busca:", e));
     }
     setInterval(atualizar, 5000);
 </script>
