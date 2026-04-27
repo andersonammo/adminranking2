@@ -46,7 +46,7 @@
         .meta-card { 
             background: var(--card-inner); 
             padding: 10px; 
-            text-align: center; /* Centralizado */
+            text-align: center;
             border-left: 3px solid var(--border); 
             display: flex; 
             flex-direction: column; 
@@ -61,11 +61,10 @@
         
         table { width: 100%; border-collapse: collapse; }
         
-        /* CENTRALIZAÇÃO DAS COLUNAS */
         thead th { 
             position: sticky; top: 0; 
             background: #0f172a; 
-            text-align: center; /* Centralizado */
+            text-align: center; 
             padding: 12px 10px; 
             color: var(--gray); 
             font-size: 0.75rem; 
@@ -74,7 +73,6 @@
             text-transform: uppercase;
         }
 
-        /* Mantendo apenas a coluna de Unidade à esquerda para leitura */
         th:nth-child(2), td:nth-child(2) { text-align: left; }
         td { text-align: center; padding: 14px 10px; border-bottom: 1px solid var(--border); font-size: 1.1rem; background: transparent; }
         
@@ -114,7 +112,7 @@
     <div class="metas-header">
         <div class="meta-card"><h3>Meta Mês</h3><span class="valor" id="meta-geral">...</span></div>
         <div class="meta-card"><h3>Realizado</h3><span class="valor" style="color:#fff" id="acumulado-mes">...</span></div>
-        <div class="meta-card mobile-hide"><h3>Faltam (25 Dias)</h3><span class="valor" style="color:var(--gray)" id="meta-quinzena">...</span></div>
+        <div class="meta-card mobile-hide"><h3>Faltam (<span id="label-dias-header">...</span> Dias)</h3><span class="valor" style="color:var(--gray)" id="meta-quinzena">...</span></div>
         <div class="meta-card mobile-hide"><h3>Média Alvo</h3><span class="valor" style="color:var(--gray)" id="meta-semana">...</span></div>
         <div class="meta-card" style="border-left:4px solid var(--accent)">
             <h3>Alvo Hoje</h3>
@@ -131,7 +129,7 @@
                     <th>UNIDADE</th>
                     <th class="mobile-hide">META TOTAL</th>
                     <th>ACUMULADO</th>
-                    <th>META/DIA (25D)</th>
+                    <th>META/DIA (<span id="label-dias-tabela">...</span>D)</th>
                     <th>HOJE</th>
                     <th>% PERFORMANCE</th>
                 </tr>
@@ -158,6 +156,22 @@
     function fmtM(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0}); }
     function fmt(v) { return v.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
     
+    // Função para calcular os dias úteis restantes no mês (exclui domingos)
+    function calcularDiasRestantes() {
+        var hoje = new Date();
+        var ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0); // Pega o último dia do mês atual
+        var diasUteis = 0;
+
+        for (var i = hoje.getDate(); i <= ultimoDia.getDate(); i++) {
+            var dataAtual = new Date(hoje.getFullYear(), hoje.getMonth(), i);
+            // dataAtual.getDay() retorna de 0 (Domingo) a 6 (Sábado)
+            if (dataAtual.getDay() !== 0) { 
+                diasUteis++;
+            }
+        }
+        return diasUteis > 0 ? diasUteis : 1; // Retorna no mínimo 1 para nunca dar erro de divisão por zero
+    }
+
     function atualizar() {
         if(!sistemaIniciado) return;
         fetch(WEB_APP_URL).then(res => res.json()).then(dados => {
@@ -167,8 +181,15 @@
             var acumuladoLojas = dados.acumuladoPorLoja || {};
             var metaGeral = lojasConfig.reduce((a, b) => a + b.meta, 0);
             
-            // DIVISÃO POR 25 DIAS (CONFORME SOLICITADO)
-            var diasDivisao = 25; 
+            // DIVISÃO DINÂMICA PELOS DIAS RESTANTES DE TRABALHO
+            var diasDivisao = calcularDiasRestantes(); 
+
+            // Atualiza o texto na tela para mostrar a quantidade real de dias restantes
+            var lblHeader = document.getElementById('label-dias-header');
+            var lblTabela = document.getElementById('label-dias-tabela');
+            if(lblHeader) lblHeader.innerText = diasDivisao;
+            if(lblTabela) lblTabela.innerText = diasDivisao;
+
             var saldoGeral = Math.max(0, metaGeral - totalMes);
             var metaDiaGeral = saldoGeral / diasDivisao;
 
@@ -192,7 +213,7 @@
                 var ac = acumuladoLojas[l.nome] || 0;
                 var sld = Math.max(0, l.meta - ac);
                 
-                // META POR LOJA TAMBÉM DIVIDIDA POR 25
+                // META POR LOJA TAMBÉM DIVIDIDA DINAMICAMENTE
                 var md = sld / diasDivisao; 
                 
                 var vh = porLojaHoje[l.nome] || 0;
